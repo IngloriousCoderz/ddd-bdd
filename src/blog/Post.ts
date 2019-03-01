@@ -1,16 +1,21 @@
 import { Page } from './Page'
 import { User } from './User'
+import { toId } from './utils'
 
 export class Post implements Page {
+  private id: string
+
   constructor(
     private title: string,
     private body: string,
     private author: User,
     private date: Date,
-  ) {}
+  ) {
+    this.id = toId(title)
+  }
 
   getId(): string {
-    return this.title
+    return this.id
   }
 
   getTitle(): string {

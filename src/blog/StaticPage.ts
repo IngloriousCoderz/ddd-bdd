@@ -1,10 +1,16 @@
 import { Page } from './Page'
+import { User } from './User'
+import { toId } from './utils'
 
 export class StaticPage implements Page {
-  constructor(private title: string, private body: string) {}
+  private id: string
+
+  constructor(private title: string, private body: string) {
+    this.id = toId(title)
+  }
 
   getId(): string {
-    return this.title
+    return this.id
   }
 
   getTitle(): string {
@@ -15,7 +21,7 @@ export class StaticPage implements Page {
     return this.body
   }
 
-  render(): string {
+  render(user?: User): string {
     return `
       <h1>${this.getTitle()}</h1>
       <div>${this.getBody()}</div>

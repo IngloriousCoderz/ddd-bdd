@@ -1,57 +1,53 @@
+import { Users } from './Users'
 import { User } from './User'
+import { Pages } from './Pages'
 import { Page } from './Page'
-import { StaticPage } from './StaticPage'
-import { PostList } from './PostList'
+import { FeaturedPostsPage } from './FeaturedPostsPage'
 import { Post } from './Post'
 
 export class Blog {
-  constructor(
-    private users: User[] = [],
-    private pages: Page[] = [],
-    private postList: PostList = new PostList(),
-  ) {
-    this.pages.push(new StaticPage('Home', 'Put some content here.'))
-    this.pages.push(this.postList)
+  private users = new Users()
+  private pages = new Pages()
+  private featuredPostsPage = new FeaturedPostsPage()
+
+  constructor() {
+    this.pages._addPage(this.featuredPostsPage)
   }
 
   addUser(email: string, nickname: string) {
-    const id = this.users.length ? this.users[this.users.length - 1].id : 0
-    const user = new User(email, nickname)
-    user.setId(id + 1)
-    this.users.push(user)
+    this.users.addUser(email, nickname)
   }
 
   getUsers(): User[] {
-    return this.users
+    return this.users.getUsers()
   }
 
   getUser(nickname): User {
-    return this.users.find(user => user.getNickname() === nickname)
+    return this.users.getUser(nickname)
   }
 
   getPages(): Page[] {
-    return this.pages
-  }
-
-  getPosts(user?: User): Post[] {
-    return this.postList.getPosts(user)
+    return this.pages.getPages()
   }
 
   addPage(title: string, body: string) {
-    const page: Page = new StaticPage(title, body)
-    this.pages.push(page)
+    this.pages.addPage(title, body)
   }
 
-  renderPage(id: string) {
-    const page = this.pages.find(page => page.getId() === id)
-    return page.render()
+  renderPage(id: string, user?: User): string {
+    const page = this.pages.getPage(id, user)
+    return page.render(user)
+  }
+
+  getPosts(user?: User): Post[] {
+    return this.featuredPostsPage.getPosts(user)
   }
 
   addPost(title: string, body: string, author: User, date: Date) {
-    this.postList.addPost(title, body, author, date)
+    this.featuredPostsPage.addPost(title, body, author, date)
   }
 
-  renderPost(id: string) {
-    return this.postList.renderPost(id)
+  renderPost(id: string): string {
+    return this.featuredPostsPage.renderPost(id)
   }
 }

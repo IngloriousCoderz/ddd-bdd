@@ -1,13 +1,20 @@
+import { Posts } from './Posts'
 import { Post } from './Post'
 import { Page } from './Page'
 import { User } from './User'
+import { toId } from './utils'
 
-export class PostList implements Page {
-  title = 'Featured Posts'
-  posts: Post[] = []
+export class FeaturedPostsPage implements Page {
+  private id: string
+  private title = 'Featured Posts'
+  private postRepository: Posts = new Posts()
+
+  constructor() {
+    this.id = toId(this.title)
+  }
 
   getId(): string {
-    return this.title
+    return this.id
   }
 
   getTitle(): string {
@@ -34,19 +41,16 @@ export class PostList implements Page {
     `
   }
 
+  getPosts(user?: User) {
+    return this.postRepository.getPosts(user)
+  }
+
   addPost(title: string, body: string, author: User, date: Date) {
-    const post = new Post(title, body, author, date)
-    this.posts.push(post)
+    this.postRepository.addPost(title, body, author, date)
   }
 
   renderPost(id: string): string {
-    const post: Post = this.posts.find(post => post.getId() === id)
+    const post: Post = this.postRepository.getPost(id)
     return post.render()
-  }
-
-  getPosts(user?: User) {
-    return user
-      ? this.posts.filter(post => post.getAuthor().getId() === user.getId())
-      : this.posts
   }
 }

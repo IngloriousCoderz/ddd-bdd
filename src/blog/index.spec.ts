@@ -13,14 +13,14 @@ describe('Blog', () => {
   })
 
   it('should initialize with a sample homepage', () => {
-    expect(blog.renderPage('Home')).toBe(`
+    expect(blog.renderPage('home')).toBe(`
       <h1>Home</h1>
       <div>Put some content here.</div>
     `)
   })
 
   it(`should initialize with an empty post list`, () => {
-    expect(blog.renderPage('Featured Posts')).toBe(`
+    expect(blog.renderPage('featured-posts')).toBe(`
       <h1>Featured Posts</h1>
       <div>No posts yet.</div>
     `)
@@ -45,7 +45,7 @@ describe('Blog', () => {
   it('should render a page', () => {
     blog.addPage('Contact Us', 'Fill in the form below.')
 
-    expect(blog.renderPage('Contact Us')).toBe(`
+    expect(blog.renderPage('contact-us')).toBe(`
       <h1>Contact Us</h1>
       <div>Fill in the form below.</div>
     `)
@@ -65,7 +65,7 @@ describe('Blog', () => {
     expect(blog.getPosts().length).toBe(1)
   })
 
-  it('should list a post', () => {
+  it('should list all posts', () => {
     blog.addUser('antony.mistretta@gmail.com', 'IceOnFire')
     const user = blog.getUser('IceOnFire')
     blog.addPost(
@@ -75,11 +75,32 @@ describe('Blog', () => {
       new Date('2019-02-25'),
     )
 
-    expect(blog.renderPage('Featured Posts')).toBe(`
+    expect(blog.renderPage('featured-posts')).toBe(`
       <h1>Featured Posts</h1>
       <h2>First!</h2>
       <div>by IceOnFire - 2019-2-25</div>
-      <div><a href="posts/First!"></a></div>
+      <div><a href="posts/first!"></a></div>
+    `)
+  })
+
+  it('should list all posts from an author', () => {
+    blog.addUser('antony.mistretta@gmail.com', 'IceOnFire')
+    blog.addUser('giancarlo.magalli@piazzaitalia.it', 'IFattiVostri')
+    const me = blog.getUser('IceOnFire')
+    const you = blog.getUser('IFattiVostri')
+    blog.addPost('My Post', 'This is my post.', me, new Date('2019-03-01'))
+    blog.addPost(
+      'Your Post',
+      'This post is yours.',
+      you,
+      new Date('2019-03-02'),
+    )
+
+    expect(blog.renderPage('featured-posts', me)).toBe(`
+      <h1>Featured Posts</h1>
+      <h2>My Post</h2>
+      <div>by IceOnFire - 2019-3-1</div>
+      <div><a href="posts/my-post"></a></div>
     `)
   })
 
@@ -93,7 +114,7 @@ describe('Blog', () => {
       new Date('2019-02-25'),
     )
 
-    expect(blog.renderPost('Paradox')).toBe(`
+    expect(blog.renderPost('paradox')).toBe(`
       <h1>Paradox</h1>
       <div>by IceOnFire - 2019-2-25</div>
       <div>This post will not be rendered correctly.</div>
