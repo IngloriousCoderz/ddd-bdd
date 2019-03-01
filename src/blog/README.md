@@ -1,6 +1,6 @@
 # Blog
 
-This exercise is a role-playing game in which the teacher pretends to be a client that has a rough idea of what they want. At first they just know they want a Wordpress-style blog, but then a few features emerge:
+This exercise is a role-playing game in which the teacher pretends to be a client that has a rough idea of what they want. At first they just know they want a Wordpress-style blog, but then a few features emerge (and they are obscure on purpose):
 
 1. Apart from posts, the blog has pages such as About or Contacts.
 2. Pages have a title and a body.
@@ -13,6 +13,7 @@ This exercise is a role-playing game in which the teacher pretends to be a clien
 9. The list of featured posts can be filtered by author's nickname.
 10. When created, the blog shoud ask for a user so there's at least one author.
 11. The blog will be a PWA that accesses a RESTful service.
+12. An admin can add users and pages, while a blogger can just add posts and read posts.
 
 The resulting code may be suboptimal, but at least it must be agreed with the client through thorough unit tests.
 This way we practice on:
@@ -22,8 +23,3 @@ This way we practice on:
 - Applying Test-Driven Development
 - Exploring Aggregates
 - Structuring code into well-defined modules
-
-Caveats:
-
-- No one asked about permissions and ACL
-- The "featured posts" page is a special page

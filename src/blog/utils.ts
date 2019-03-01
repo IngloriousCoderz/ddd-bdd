@@ -1,7 +1,7 @@
-import slugify from 'slugify'
+import slugify from 'slugify';
 
-export { toId }
+export { toId };
 
 function toId(title: string): string {
-  return slugify(title.toLowerCase())
+  return slugify(title.toLowerCase());
 }

@@ -1,20 +1,18 @@
-import { User } from './User'
+import { User } from './User';
 
 export class Users {
-  private users: User[] = []
+  private users: User[] = [];
 
-  all(): User[] {
-    return this.users
+  public all(): User[] {
+    return this.users;
   }
 
-  find(nickname): User {
-    return this.users.find(user => user.getNickname() === nickname)
+  public find(username): User {
+    return this.users.find(user => user.getUsername() === username);
   }
 
-  add(email: string, nickname: string) {
-    const id = this.users.length ? this.users[this.users.length - 1].getId() : 0
-    const user = new User(email, nickname)
-    user.setId(id + 1)
-    this.users.push(user)
+  public add(username: string, password: string, role?: string) {
+    const user = new User(username, password, role);
+    this.users.push(user);
   }
 }

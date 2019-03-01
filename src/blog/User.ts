@@ -1,21 +1,23 @@
 export class User {
-  private id: number
+  constructor(
+    private username: string,
+    private password: string,
+    private role = 'authenticated',
+  ) {}
 
-  constructor(private email: string, private nickname: string) {}
-
-  getId(): number {
-    return this.id
+  public getUsername(): string {
+    return this.username;
   }
 
-  setId(id: number) {
-    this.id = id
+  public getPassword(): string {
+    return this.password;
   }
 
-  getNickname(): string {
-    return this.nickname
+  public getRole(): string {
+    return this.role;
   }
 
-  toString(): string {
-    return this.nickname
+  public toString(): string {
+    return this.username;
   }
 }
