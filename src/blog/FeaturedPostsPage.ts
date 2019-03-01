@@ -1,5 +1,4 @@
 import { Posts } from './Posts'
-import { Post } from './Post'
 import { Page } from './Page'
 import { User } from './User'
 import { toId } from './utils'
@@ -7,7 +6,7 @@ import { toId } from './utils'
 export class FeaturedPostsPage implements Page {
   private id: string
   private title = 'Featured Posts'
-  private postRepository: Posts = new Posts()
+  private posts: Posts
 
   constructor() {
     this.id = toId(this.title)
@@ -33,6 +32,10 @@ export class FeaturedPostsPage implements Page {
       .join('')
   }
 
+  setPosts(posts: Posts) {
+    this.posts = posts
+  }
+
   render(user?: User): string {
     const body = this.getBody(user).trim()
     return `
@@ -42,15 +45,6 @@ export class FeaturedPostsPage implements Page {
   }
 
   getPosts(user?: User) {
-    return this.postRepository.getPosts(user)
-  }
-
-  addPost(title: string, body: string, author: User, date: Date) {
-    this.postRepository.addPost(title, body, author, date)
-  }
-
-  renderPost(id: string): string {
-    const post: Post = this.postRepository.getPost(id)
-    return post.render()
+    return this.posts.all(user)
   }
 }

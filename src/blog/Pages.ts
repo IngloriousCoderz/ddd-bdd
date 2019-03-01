@@ -9,20 +9,25 @@ export class Pages {
     this.pages.push(new StaticPage('Home', 'Put some content here.'))
   }
 
-  getPages(): Page[] {
+  all(): Page[] {
     return this.pages
   }
 
-  getPage(id: string, user?: User): Page {
+  find(id: string, user?: User): Page {
     return this.pages.find(page => page.getId() === id)
   }
 
-  addPage(title: string, body: string) {
+  add(title: string, body: string) {
     const page: Page = new StaticPage(title, body)
-    this._addPage(page)
+    this.addPage(page)
   }
 
-  _addPage(page: Page) {
+  addPage(page: Page) {
     this.pages.push(page)
+  }
+
+  render(id: string, user?: User) {
+    const page = this.find(id, user)
+    return page.render(user)
   }
 }

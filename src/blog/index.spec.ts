@@ -53,12 +53,10 @@ describe('Blog', () => {
 
   it('should add a new post', () => {
     blog.addUser('antony.mistretta@gmail.com', 'IceOnFire')
-    const user = blog.getUser('IceOnFire')
-
     blog.addPost(
       'Hello world!',
       'This is my first post.',
-      user,
+      'IceOnFire',
       new Date('2019-02-25'),
     )
 
@@ -67,11 +65,10 @@ describe('Blog', () => {
 
   it('should list all posts', () => {
     blog.addUser('antony.mistretta@gmail.com', 'IceOnFire')
-    const user = blog.getUser('IceOnFire')
     blog.addPost(
       'First!',
       'This is my first post.',
-      user,
+      'IceOnFire',
       new Date('2019-02-25'),
     )
 
@@ -85,18 +82,20 @@ describe('Blog', () => {
 
   it('should list all posts from an author', () => {
     blog.addUser('antony.mistretta@gmail.com', 'IceOnFire')
-    blog.addUser('giancarlo.magalli@piazzaitalia.it', 'IFattiVostri')
-    const me = blog.getUser('IceOnFire')
-    const you = blog.getUser('IFattiVostri')
-    blog.addPost('My Post', 'This is my post.', me, new Date('2019-03-01'))
+    blog.addPost(
+      'My Post',
+      'This is my post.',
+      'IceOnFire',
+      new Date('2019-03-01'),
+    )
     blog.addPost(
       'Your Post',
       'This post is yours.',
-      you,
+      'admin',
       new Date('2019-03-02'),
     )
 
-    expect(blog.renderPage('featured-posts', me)).toBe(`
+    expect(blog.renderPage('featured-posts', 'IceOnFire')).toBe(`
       <h1>Featured Posts</h1>
       <h2>My Post</h2>
       <div>by IceOnFire - 2019-3-1</div>
@@ -106,11 +105,10 @@ describe('Blog', () => {
 
   it('should render a post', () => {
     blog.addUser('antony.mistretta@gmail.com', 'IceOnFire')
-    const user = blog.getUser('IceOnFire')
     blog.addPost(
       'Paradox',
       'This post will not be rendered correctly.',
-      user,
+      'IceOnFire',
       new Date('2019-02-25'),
     )
 

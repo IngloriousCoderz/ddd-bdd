@@ -3,51 +3,51 @@ import { User } from './User'
 import { Pages } from './Pages'
 import { Page } from './Page'
 import { FeaturedPostsPage } from './FeaturedPostsPage'
+import { Posts } from './Posts'
 import { Post } from './Post'
 
 export class Blog {
   private users = new Users()
   private pages = new Pages()
+  private posts = new Posts()
   private featuredPostsPage = new FeaturedPostsPage()
 
   constructor() {
-    this.pages._addPage(this.featuredPostsPage)
+    this.featuredPostsPage.setPosts(this.posts)
+    this.pages.addPage(this.featuredPostsPage)
   }
 
   addUser(email: string, nickname: string) {
-    this.users.addUser(email, nickname)
+    this.users.add(email, nickname)
   }
 
   getUsers(): User[] {
-    return this.users.getUsers()
-  }
-
-  getUser(nickname): User {
-    return this.users.getUser(nickname)
+    return this.users.all()
   }
 
   getPages(): Page[] {
-    return this.pages.getPages()
+    return this.pages.all()
   }
 
   addPage(title: string, body: string) {
-    this.pages.addPage(title, body)
+    this.pages.add(title, body)
   }
 
-  renderPage(id: string, user?: User): string {
-    const page = this.pages.getPage(id, user)
-    return page.render(user)
+  renderPage(id: string, nickname?: string): string {
+    const user = this.users.find(nickname)
+    return this.pages.render(id, user)
   }
 
   getPosts(user?: User): Post[] {
     return this.featuredPostsPage.getPosts(user)
   }
 
-  addPost(title: string, body: string, author: User, date: Date) {
-    this.featuredPostsPage.addPost(title, body, author, date)
+  addPost(title: string, body: string, author: string, date: Date) {
+    const user = this.users.find(author)
+    this.posts.add(title, body, user, date)
   }
 
   renderPost(id: string): string {
-    return this.featuredPostsPage.renderPost(id)
+    return this.posts.render(id)
   }
 }
