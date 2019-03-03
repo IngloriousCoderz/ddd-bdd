@@ -1,21 +1,21 @@
-import createBlog from '..';
-import { AuthBlog } from '../domain/AuthBlog';
-import { Blog } from '../domain/Blog';
+import createBlog from '..'
+import { AuthBlog } from '../domain/AuthBlog'
+import { Blog } from '../domain/Blog'
 
 describe('Blog', () => {
-  let blog: Blog;
-  let authBlog: AuthBlog;
+  let blog: Blog
+  let authBlog: AuthBlog
 
   beforeEach(() => {
-    blog = createBlog();
-    authBlog = blog as AuthBlog;
-  });
+    blog = createBlog()
+    authBlog = blog as AuthBlog
+  })
 
   describe('Initialization', () => {
     it('should initialize with a registered admin user', () => {
-      authBlog.login('admin', 'admin');
-      expect(authBlog.getUsers().length).toBe(1);
-    });
+      authBlog.login('admin', 'admin')
+      expect(authBlog.getUsers().length).toBe(1)
+    })
 
     it('should initialize with a sample homepage', () => {
       expect(blog.renderPage('home')).toBe(
@@ -37,8 +37,8 @@ describe('Blog', () => {
           '</main>',
           '<nav><ul></ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should initialize with an empty post list', () => {
       expect(blog.renderPage('featured-posts')).toBe(
@@ -64,9 +64,9 @@ describe('Blog', () => {
           '</main>',
           '<nav><ul></ul></nav>',
         ].join(''),
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('Authentication', () => {
     it('should render the "Sign On" page', () => {
@@ -91,15 +91,15 @@ describe('Blog', () => {
           '<nav><ul>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should sign on a new user', () => {
-      authBlog.register('blogger', 'blogger');
-      authBlog.login('admin', 'admin');
+      authBlog.register('blogger', 'blogger')
+      authBlog.login('admin', 'admin')
 
-      expect(authBlog.getUsers().length).toBe(2);
-    });
+      expect(authBlog.getUsers().length).toBe(2)
+    })
 
     it('should render the "Sign In" page', () => {
       expect(authBlog.renderLogin()).toBe(
@@ -123,35 +123,35 @@ describe('Blog', () => {
           '<nav><ul>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should prevent a non-registered user from signing in', () => {
-      expect(() => authBlog.login('blogger', 'blogger')).toThrow();
-    });
+      expect(() => authBlog.login('blogger', 'blogger')).toThrow()
+    })
 
     it('should prevent a user from signing in with a wrong password', () => {
-      expect(() => authBlog.login('admin', 'wrongpassword')).toThrow();
-    });
+      expect(() => authBlog.login('admin', 'wrongpassword')).toThrow()
+    })
 
     it('should prevent a non-admin user from listing all users', () => {
-      authBlog.register('blogger', 'blogger');
-      authBlog.login('blogger', 'blogger');
+      authBlog.register('blogger', 'blogger')
+      authBlog.login('blogger', 'blogger')
 
-      expect(() => authBlog.getUsers().length).toThrow();
-    });
+      expect(() => authBlog.getUsers().length).toThrow()
+    })
 
     it('should sign out', () => {
-      authBlog.login('admin', 'admin');
-      authBlog.logout();
+      authBlog.login('admin', 'admin')
+      authBlog.logout()
 
-      expect(() => authBlog.getUsers().length).toThrow();
-    });
-  });
+      expect(() => authBlog.getUsers().length).toThrow()
+    })
+  })
 
   describe('Pages', () => {
     it('should render the "Add Page" page if user is an admin', () => {
-      authBlog.login('admin', 'admin');
+      authBlog.login('admin', 'admin')
 
       expect(blog.renderAddPage()).toBe(
         [
@@ -177,23 +177,23 @@ describe('Blog', () => {
           '<li><a href="/add-post">Add Post</a></li>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should prevent unauthenticated users from rendering the "Add Page" page', () => {
-      expect(() => blog.renderAddPage()).toThrow();
-    });
+      expect(() => blog.renderAddPage()).toThrow()
+    })
 
     it('should prevent non-admin users from rendering the "Add Page" page', () => {
-      authBlog.register('blogger', 'blogger');
-      authBlog.login('blogger', 'blogger');
+      authBlog.register('blogger', 'blogger')
+      authBlog.login('blogger', 'blogger')
 
-      expect(() => blog.renderAddPage()).toThrow();
-    });
+      expect(() => blog.renderAddPage()).toThrow()
+    })
 
     it('should add a new page', () => {
-      authBlog.login('admin', 'admin');
-      blog.addPage('About', 'This is the about section.');
+      authBlog.login('admin', 'admin')
+      blog.addPage('About', 'This is the about section.')
 
       expect(blog.renderPage('about')).toBe(
         [
@@ -218,29 +218,29 @@ describe('Blog', () => {
           '<li><a href="/add-post">Add Post</a></li>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should prevent unauthenticated users from adding a page', () => {
       expect(() =>
         blog.addPage('About', 'This is the about section.'),
-      ).toThrow();
-    });
+      ).toThrow()
+    })
 
     it('should prevent non-admin users from adding a page', () => {
-      authBlog.register('blogger', 'blogger');
-      authBlog.login('blogger', 'blogger');
+      authBlog.register('blogger', 'blogger')
+      authBlog.login('blogger', 'blogger')
 
       expect(() =>
         blog.addPage('About', 'This is the about section.'),
-      ).toThrow();
-    });
-  });
+      ).toThrow()
+    })
+  })
 
   describe('Posts', () => {
     it('should render the "Add Post" page if user is signed in', () => {
-      authBlog.register('blogger', 'blogger');
-      authBlog.login('blogger', 'blogger');
+      authBlog.register('blogger', 'blogger')
+      authBlog.login('blogger', 'blogger')
 
       expect(blog.renderAddPost()).toBe(
         [
@@ -265,22 +265,22 @@ describe('Blog', () => {
           '<li><a href="/add-post">Add Post</a></li>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should prevent unauthenticated users from rendering the "Add Post" page', () => {
-      expect(() => blog.renderAddPost()).toThrow();
-    });
+      expect(() => blog.renderAddPost()).toThrow()
+    })
 
     it('should add a new post', () => {
-      authBlog.register('blogger', 'blogger');
-      authBlog.login('blogger', 'blogger');
+      authBlog.register('blogger', 'blogger')
+      authBlog.login('blogger', 'blogger')
       blog.addPost(
         'Hello world!',
         'This is my first post.',
         new Date('2019-02-25'),
         'blogger',
-      );
+      )
 
       expect(blog.renderPost('hello-world!')).toBe(
         [
@@ -304,23 +304,23 @@ describe('Blog', () => {
           '<li><a href="/add-post">Add Post</a></li>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should prevent adding a post if user is not signed in', () => {
-      expect(() => blog.renderPost('hello-world!')).toThrow();
-    });
-  });
+      expect(() => blog.renderPost('hello-world!')).toThrow()
+    })
+  })
 
   describe('Featured Posts', () => {
     it('should list all posts', () => {
-      authBlog.login('admin', 'admin');
+      authBlog.login('admin', 'admin')
       blog.addPost(
         'First!',
         'This is my first post.',
         new Date('2019-02-25'),
         'admin',
-      );
+      )
 
       expect(blog.renderFeaturedPosts()).toBe(
         [
@@ -352,17 +352,17 @@ describe('Blog', () => {
           '<li><a href="/add-post">Add Post</a></li>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should render featured posts as a page', () => {
-      authBlog.login('admin', 'admin');
+      authBlog.login('admin', 'admin')
       blog.addPost(
         'First!',
         'This is my first post.',
         new Date('2019-02-25'),
         'admin',
-      );
+      )
 
       expect(blog.renderPage('featured-posts')).toBe(
         [
@@ -394,26 +394,26 @@ describe('Blog', () => {
           '<li><a href="/add-post">Add Post</a></li>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
+      )
+    })
 
     it('should render featured posts from a specific author', () => {
-      authBlog.login('admin', 'admin');
+      authBlog.login('admin', 'admin')
       blog.addPost(
         'My Post',
         'This is my post.',
         new Date('2019-03-01'),
         'admin',
-      );
+      )
 
-      authBlog.register('blogger', 'blogger');
-      authBlog.login('blogger', 'blogger');
+      authBlog.register('blogger', 'blogger')
+      authBlog.login('blogger', 'blogger')
       blog.addPost(
         'Your Post',
         'This post is yours.',
         new Date('2019-03-02'),
         'blogger',
-      );
+      )
 
       expect(blog.renderFeaturedPosts('blogger')).toBe(
         [
@@ -445,9 +445,9 @@ describe('Blog', () => {
           '<li><a href="/add-post">Add Post</a></li>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('Errors', () => {
     it('should display an error page', () => {
@@ -468,7 +468,7 @@ describe('Blog', () => {
           '<nav><ul>',
           '</ul></nav>',
         ].join(''),
-      );
-    });
-  });
-});
+      )
+    })
+  })
+})

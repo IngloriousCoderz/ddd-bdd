@@ -3,6 +3,7 @@
   "rules": {
     "arrow-parens": [true, "ban-single-arg-parens"],
     "interface-name": [true, "never-prefix"],
-    "quotemark": [true, "single"]
+    "quotemark": [true, "single"],
+    "semicolon": [true, "never"]
   }
 }

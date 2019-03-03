@@ -1,6 +1,6 @@
 {
   "extends": "eslint:recommended",
   "rules": {
-    "semi": ["error", "always"]
+    "semi": ["error", "never"]
   }
 }

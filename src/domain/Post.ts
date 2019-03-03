@@ -1,9 +1,9 @@
-import { toId } from '../service/utils';
-import { Page } from './Page';
-import { User } from './User';
+import { toId } from '../service/utils'
+import { Page } from './Page'
+import { User } from './User'
 
 export class Post implements Page {
-  private id: string;
+  private id: string
 
   constructor(
     private title: string,
@@ -11,27 +11,27 @@ export class Post implements Page {
     private date: Date,
     private author: User,
   ) {
-    this.id = toId(title);
+    this.id = toId(title)
   }
 
   public getId(): string {
-    return this.id;
+    return this.id
   }
 
   public getTitle(): string {
-    return this.title;
+    return this.title
   }
 
   public getBody(): string {
-    return this.body;
+    return this.body
   }
 
   public getAuthor(): User {
-    return this.author;
+    return this.author
   }
 
   public getDate(): string {
-    return this.date.toLocaleDateString();
+    return this.date.toLocaleDateString()
   }
 
   public render(): string {
@@ -41,6 +41,6 @@ export class Post implements Page {
       `<div class="sub">by ${this.getAuthor().toString()} - ${this.getDate()}</div>`,
       `<div>${this.getBody()}</div>`,
       '</article>',
-    ].join('');
+    ].join('')
   }
 }

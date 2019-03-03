@@ -1,34 +1,34 @@
-import { Posts } from '../service/Posts';
-import { Users } from '../service/Users';
-import { toId } from '../service/utils';
-import { Page } from './Page';
-import { Post } from './Post';
-import { User } from './User';
+import { Posts } from '../service/Posts'
+import { Users } from '../service/Users'
+import { toId } from '../service/utils'
+import { Page } from './Page'
+import { Post } from './Post'
+import { User } from './User'
 
 export class FeaturedPosts implements Page {
-  private id: string;
-  private title = 'Featured Posts';
+  private id: string
+  private title = 'Featured Posts'
 
   constructor(private posts: Posts, private users: Users) {
-    this.id = toId(this.title);
+    this.id = toId(this.title)
   }
 
   public getId(): string {
-    return this.id;
+    return this.id
   }
 
   public getTitle(): string {
-    return this.title;
+    return this.title
   }
 
   public getBody(author?: User): string {
     return this.getPosts(author)
       .map(this.getPostBody)
-      .join('');
+      .join('')
   }
 
   public render(author?: User): string {
-    const body = this.getBody(author).trim();
+    const body = this.getBody(author).trim()
     return [
       '<article>',
       `<h1>${this.getTitle()}</h1>`,
@@ -37,11 +37,11 @@ export class FeaturedPosts implements Page {
       '</div>',
       '</article>',
       `${body.length ? body : '<article>No posts yet.</article>'}`,
-    ].join('');
+    ].join('')
   }
 
   private getPosts(author?: User): Post[] {
-    return this.posts.all(author);
+    return this.posts.all(author)
   }
 
   private getPostBody(post: Post): string {
@@ -53,10 +53,10 @@ export class FeaturedPosts implements Page {
         .toString()} - ${post.getDate()}</div>`,
       `<div class="text-right"><a href="/posts/${post.getId()}">read more&rsaquo;</a></div>`,
       '</article>',
-    ].join('');
+    ].join('')
   }
 
   private getUserLink(user) {
-    return `<a href="/pages/featured-posts?author=${user.getUsername()}">${user.getUsername()}</a>`;
+    return `<a href="/pages/featured-posts?author=${user.getUsername()}">${user.getUsername()}</a>`
   }
 }

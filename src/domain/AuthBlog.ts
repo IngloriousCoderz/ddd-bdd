@@ -1,75 +1,75 @@
-import { Auth } from '../service/Auth';
-import { Users } from '../service/Users';
-import { Blog } from './Blog';
-import { User } from './User';
+import { Auth } from '../service/Auth'
+import { Users } from '../service/Users'
+import { Blog } from './Blog'
+import { User } from './User'
 
 export class AuthBlog implements Blog {
-  private auth: Auth;
+  private auth: Auth
 
   constructor(private blog: Blog, private users: Users) {
-    this.auth = new Auth(users);
+    this.auth = new Auth(users)
   }
 
   public register(username: string, password: string, role?: string): void {
-    this.auth.register(username, password, role);
+    this.auth.register(username, password, role)
   }
 
   public login(username: string, password: string): void {
-    this.auth.login(username, password);
+    this.auth.login(username, password)
   }
 
   public logout(): void {
-    this.auth.logout();
+    this.auth.logout()
   }
 
   public getUsers(): User[] {
     if (!this.auth.isAdmin()) {
-      throw new Error('You cannot perform this operation.');
+      throw new Error('You cannot perform this operation.')
     }
-    return this.users.all();
+    return this.users.all()
   }
 
   public renderAddPage(): string {
     if (!this.auth.isAdmin()) {
-      throw new Error('You cannot perform this operation.');
+      throw new Error('You cannot perform this operation.')
     }
-    const renderedPage = this.blog.renderAddPage();
-    return this.renderLayout(renderedPage);
+    const renderedPage = this.blog.renderAddPage()
+    return this.renderLayout(renderedPage)
   }
 
   public addPage(title: string, body: string): string {
     if (!this.auth.isAdmin()) {
-      throw new Error('You cannot perform this operation.');
+      throw new Error('You cannot perform this operation.')
     }
-    return this.blog.addPage(title, body);
+    return this.blog.addPage(title, body)
   }
 
   public renderPage(id: string): string {
-    const renderedPage = this.blog.renderPage(id);
-    return this.renderLayout(renderedPage);
+    const renderedPage = this.blog.renderPage(id)
+    return this.renderLayout(renderedPage)
   }
 
   public renderAddPost(): string {
     if (this.auth.getUser() == null) {
-      throw new Error('You must be logged in.');
+      throw new Error('You must be logged in.')
     }
-    const renderedPage = this.blog.renderAddPost();
-    return this.renderLayout(renderedPage);
+    const renderedPage = this.blog.renderAddPost()
+    return this.renderLayout(renderedPage)
   }
 
   public addPost(title: string, body: string, date: Date): string {
-    const username = this.auth.getUser().getUsername();
-    return this.blog.addPost(title, body, date, username);
+    const username = this.auth.getUser().getUsername()
+    return this.blog.addPost(title, body, date, username)
   }
 
   public renderPost(id: string): string {
-    const renderedPage = this.blog.renderPost(id);
-    return this.renderLayout(renderedPage);
+    const renderedPage = this.blog.renderPost(id)
+    return this.renderLayout(renderedPage)
   }
 
   public renderFeaturedPosts(author?: string): string {
-    const renderedPage = this.blog.renderFeaturedPosts(author);
-    return this.renderLayout(renderedPage);
+    const renderedPage = this.blog.renderFeaturedPosts(author)
+    return this.renderLayout(renderedPage)
   }
 
   public renderRegister(): string {
@@ -85,8 +85,8 @@ export class AuthBlog implements Blog {
       '<button type="submit">Sign On</button>',
       '</form>',
       '</main>',
-    ].join('');
-    return this.renderLayout(renderedPage);
+    ].join('')
+    return this.renderLayout(renderedPage)
   }
 
   public renderLogin(): string {
@@ -102,8 +102,8 @@ export class AuthBlog implements Blog {
       '<button type="submit">Sign In</button>',
       '</form>',
       '</main>',
-    ].join('');
-    return this.renderLayout(renderedPage);
+    ].join('')
+    return this.renderLayout(renderedPage)
   }
 
   public renderError(error): string {
@@ -115,8 +115,8 @@ export class AuthBlog implements Blog {
       '<h1>Sorry</h1>',
       `<p>${error.message}</p>`,
       '</main>',
-    ].join('');
-    return this.renderLayout(renderedPage);
+    ].join('')
+    return this.renderLayout(renderedPage)
   }
 
   private renderLayout(renderedPage: string): string {
@@ -133,6 +133,6 @@ export class AuthBlog implements Blog {
         : '',
       this.auth.getUser() ? '<li><a href="/add-post">Add Post</a></li>' : '',
       '</ul></nav>',
-    ].join('');
+    ].join('')
   }
 }

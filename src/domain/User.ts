@@ -6,18 +6,18 @@ export class User {
   ) {}
 
   public getUsername(): string {
-    return this.username;
+    return this.username
   }
 
   public getPassword(): string {
-    return this.password;
+    return this.password
   }
 
   public getRole(): string {
-    return this.role;
+    return this.role
   }
 
   public toString(): string {
-    return this.username;
+    return this.username
   }
 }

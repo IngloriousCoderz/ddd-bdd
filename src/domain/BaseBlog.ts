@@ -1,18 +1,18 @@
-import { Pages } from '../service/Pages';
-import { Posts } from '../service/Posts';
-import { Users } from '../service/Users';
-import { Blog } from './Blog';
-import { FeaturedPosts } from './FeaturedPosts';
+import { Pages } from '../service/Pages'
+import { Posts } from '../service/Posts'
+import { Users } from '../service/Users'
+import { Blog } from './Blog'
+import { FeaturedPosts } from './FeaturedPosts'
 
 export class BaseBlog implements Blog {
-  private pages = new Pages();
-  private posts = new Posts();
-  private featuredPosts: FeaturedPosts;
+  private pages = new Pages()
+  private posts = new Posts()
+  private featuredPosts: FeaturedPosts
 
   constructor(private users: Users) {
-    this.addPage('Home', 'Put some content here.');
-    this.featuredPosts = new FeaturedPosts(this.posts, users);
-    this.pages.addPage(this.featuredPosts);
+    this.addPage('Home', 'Put some content here.')
+    this.featuredPosts = new FeaturedPosts(this.posts, users)
+    this.pages.addPage(this.featuredPosts)
   }
 
   public renderAddPage(): string {
@@ -23,17 +23,17 @@ export class BaseBlog implements Blog {
       '<label>Body</label><textarea name="body" rows="8" cols="26"></textarea><br/>',
       '<button type="submit">Add Page</button>',
       '</form>',
-    ].join('');
-    return this.renderLayout(renderedPage);
+    ].join('')
+    return this.renderLayout(renderedPage)
   }
 
   public addPage(title: string, body: string): string {
-    return this.pages.add(title, body);
+    return this.pages.add(title, body)
   }
 
   public renderPage(id: string): string {
-    const renderedPage = this.pages.render(id);
-    return this.renderLayout(renderedPage);
+    const renderedPage = this.pages.render(id)
+    return this.renderLayout(renderedPage)
   }
 
   public renderAddPost(): string {
@@ -44,8 +44,8 @@ export class BaseBlog implements Blog {
       '<label>Body</label><textarea name="body" rows="8" cols="26"></textarea><br/>',
       '<button type="submit">Add Post</button>',
       '</form>',
-    ].join('');
-    return this.renderLayout(renderedPage);
+    ].join('')
+    return this.renderLayout(renderedPage)
   }
 
   public addPost(
@@ -54,23 +54,23 @@ export class BaseBlog implements Blog {
     date: Date,
     author: string,
   ): string {
-    const user = this.users.find(author);
-    return this.posts.add(title, body, date, user);
+    const user = this.users.find(author)
+    return this.posts.add(title, body, date, user)
   }
 
   public renderPost(id: string): string {
-    const renderedPage = this.posts.render(id);
-    return this.renderLayout(renderedPage);
+    const renderedPage = this.posts.render(id)
+    return this.renderLayout(renderedPage)
   }
 
   public renderFeaturedPosts(author?: string): string {
-    const user = this.users.find(author);
-    const renderedPage = this.featuredPosts.render(user);
-    return this.renderLayout(renderedPage);
+    const user = this.users.find(author)
+    const renderedPage = this.featuredPosts.render(user)
+    return this.renderLayout(renderedPage)
   }
 
   private renderLayout(renderedPage: string): string {
-    return [this.renderNav(), '<main>', renderedPage, '</main>'].join('');
+    return [this.renderNav(), '<main>', renderedPage, '</main>'].join('')
   }
 
   private renderNav(): string {
@@ -78,10 +78,10 @@ export class BaseBlog implements Blog {
       '<nav><ul>',
       ...this.pages.all().map(this.renderLink),
       '</ul></nav>',
-    ].join('');
+    ].join('')
   }
 
   private renderLink(page): string {
-    return [`<li><a href="/pages/${page.id}">${page.title}</a></li>`].join('');
+    return [`<li><a href="/pages/${page.id}">${page.title}</a></li>`].join('')
   }
 }

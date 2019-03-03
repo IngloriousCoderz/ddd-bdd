@@ -1,8 +1,8 @@
-import { User } from './User';
+import { User } from './User'
 
 export interface Page {
-  getId(): string;
-  getTitle(): string;
-  getBody(): string;
-  render(): string;
+  getId(): string
+  getTitle(): string
+  getBody(): string
+  render(): string
 }

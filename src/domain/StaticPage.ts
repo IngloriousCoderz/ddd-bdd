@@ -1,23 +1,23 @@
-import { toId } from '../service/utils';
-import { Page } from './Page';
+import { toId } from '../service/utils'
+import { Page } from './Page'
 
 export class StaticPage implements Page {
-  private id: string;
+  private id: string
 
   constructor(private title: string, private body: string) {
-    this.id = toId(title);
+    this.id = toId(title)
   }
 
   public getId(): string {
-    return this.id;
+    return this.id
   }
 
   public getTitle(): string {
-    return this.title;
+    return this.title
   }
 
   public getBody(): string {
-    return this.body;
+    return this.body
   }
 
   public render(): string {
@@ -26,6 +26,6 @@ export class StaticPage implements Page {
       `<h1>${this.getTitle()}</h1>`, // HACK: this comment is here just to keep indentation
       `<div>${this.getBody()}</div>`,
       '</article>',
-    ].join('');
+    ].join('')
   }
 }
