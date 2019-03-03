@@ -1,31 +1,20 @@
 import { Blog } from './Blog';
-import { FeaturedPostsPage } from './FeaturedPostsPage';
-import { Page } from './Page';
-import { Pages } from './Pages';
-import { Post } from './Post';
-import { Posts } from './Posts';
-import { User } from './User';
-import { Users } from './Users';
+import { FeaturedPosts } from './domain/FeaturedPosts';
+import { Pages } from './service/Pages';
+import { Posts } from './service/Posts';
+import { Users } from './service/Users';
 
 export class BaseBlog implements Blog {
   private pages = new Pages();
   private posts = new Posts();
-  private featuredPostsPage: FeaturedPostsPage;
+  private featuredPostsPage: FeaturedPosts;
 
   constructor(private users: Users) {
-    this.featuredPostsPage = new FeaturedPostsPage(this.posts);
+    this.featuredPostsPage = new FeaturedPosts(this.posts);
     this.pages.addPage(this.featuredPostsPage);
   }
 
-  public getUsers(): User[] {
-    return this.users.all();
-  }
-
-  public getPages(): Page[] {
-    return this.pages.all();
-  }
-
-  public addPage(title: string, body: string) {
+  public addPage(title: string, body: string): void {
     this.pages.add(title, body);
   }
 
@@ -34,11 +23,12 @@ export class BaseBlog implements Blog {
     return this.pages.render(id, user);
   }
 
-  public getPosts(user?: User): Post[] {
-    return this.featuredPostsPage.getPosts(user);
-  }
-
-  public addPost(title: string, body: string, date: Date, author: string) {
+  public addPost(
+    title: string,
+    body: string,
+    date: Date,
+    author: string,
+  ): void {
     const user = this.users.find(author);
     this.posts.add(title, body, date, user);
   }

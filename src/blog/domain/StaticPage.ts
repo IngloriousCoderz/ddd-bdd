@@ -1,6 +1,6 @@
+import { toId } from '../service/utils';
 import { Page } from './Page';
 import { User } from './User';
-import { toId } from './utils';
 
 export class StaticPage implements Page {
   private id: string;
@@ -22,9 +22,9 @@ export class StaticPage implements Page {
   }
 
   public render(user?: User): string {
-    return `
-      <h1>${this.getTitle()}</h1>
-      <div>${this.getBody()}</div>
-    `;
+    return [
+      `<h1>${this.getTitle()}</h1>`, // HACK: this comment is here just to keep indentation
+      `<div>${this.getBody()}</div>`,
+    ].join('');
   }
 }

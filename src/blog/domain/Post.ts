@@ -1,6 +1,6 @@
+import { toId } from '../service/utils';
 import { Page } from './Page';
 import { User } from './User';
-import { toId } from './utils';
 
 export class Post implements Page {
   private id: string;
@@ -35,10 +35,10 @@ export class Post implements Page {
   }
 
   public render(): string {
-    return `
-      <h1>${this.getTitle()}</h1>
-      <div>by ${this.getAuthor().toString()} - ${this.getDate()}</div>
-      <div>${this.getBody()}</div>
-    `;
+    return [
+      `<h1>${this.getTitle()}</h1>`,
+      `<div>by ${this.getAuthor().toString()} - ${this.getDate()}</div>`,
+      `<div>${this.getBody()}</div>`,
+    ].join('');
   }
 }

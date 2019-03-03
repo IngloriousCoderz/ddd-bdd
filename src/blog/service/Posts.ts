@@ -1,10 +1,10 @@
-import { Post } from './Post';
-import { User } from './User';
+import { Post } from '../domain/Post';
+import { User } from '../domain/User';
 
 export class Posts {
   private posts: Post[] = [];
 
-  public all(user?: User) {
+  public all(user?: User): Post[] {
     return user
       ? this.posts.filter(
           post => post.getAuthor().getUsername() === user.getUsername(),
@@ -16,7 +16,7 @@ export class Posts {
     return this.posts.find(post => post.getId() === id);
   }
 
-  public add(title: string, body: string, date: Date, author: User) {
+  public add(title: string, body: string, date: Date, author: User): void {
     const post = new Post(title, body, date, author);
     this.posts.push(post);
   }

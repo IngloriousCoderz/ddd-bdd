@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from '../domain/User';
 import { Users } from './Users';
 
 export class Auth {
@@ -6,11 +6,11 @@ export class Auth {
 
   constructor(private users: Users) {}
 
-  public register(username: string, password: string, role?: string) {
+  public register(username: string, password: string, role?: string): void {
     this.users.add(username, password, role);
   }
 
-  public login(username: string, password: string) {
+  public login(username: string, password: string): void {
     const user = this.users.find(username);
     if (user == null) {
       throw new Error('Wrong username or password.');
@@ -25,7 +25,11 @@ export class Auth {
     return this.user;
   }
 
-  public isAdmin() {
-    return this.user.getRole() === 'admin';
+  public isAdmin(): boolean {
+    try {
+      return this.user.getRole() === 'admin';
+    } catch (error) {
+      throw new Error('User is not logged in.');
+    }
   }
 }

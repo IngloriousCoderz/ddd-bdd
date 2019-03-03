@@ -1,6 +1,6 @@
-import { Page } from './Page';
-import { StaticPage } from './StaticPage';
-import { User } from './User';
+import { Page } from '../domain/Page';
+import { StaticPage } from '../domain/StaticPage';
+import { User } from '../domain/User';
 
 export class Pages {
   private pages: Page[] = [];
@@ -9,24 +9,20 @@ export class Pages {
     this.pages.push(new StaticPage('Home', 'Put some content here.'));
   }
 
-  public all(): Page[] {
-    return this.pages;
-  }
-
   public find(id: string, user?: User): Page {
     return this.pages.find(page => page.getId() === id);
   }
 
-  public add(title: string, body: string) {
+  public add(title: string, body: string): void {
     const page: Page = new StaticPage(title, body);
     this.addPage(page);
   }
 
-  public addPage(page: Page) {
+  public addPage(page: Page): void {
     this.pages.push(page);
   }
 
-  public render(id: string, user?: User) {
+  public render(id: string, user?: User): string {
     const page = this.find(id, user);
     return page.render(user);
   }

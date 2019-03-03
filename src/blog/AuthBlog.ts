@@ -1,22 +1,20 @@
-import { Auth } from './Auth';
 import { Blog } from './Blog';
-import { Page } from './Page';
-import { Post } from './Post';
-import { User } from './User';
-import { Users } from './Users';
+import { User } from './domain/User';
+import { Auth } from './service/Auth';
+import { Users } from './service/Users';
 
 export class AuthBlog implements Blog {
   private auth: Auth;
 
-  constructor(private blog: Blog, users: Users) {
+  constructor(private blog: Blog, private users: Users) {
     this.auth = new Auth(users);
   }
 
-  public register(username: string, password: string, role?: string) {
+  public register(username: string, password: string, role?: string): void {
     this.auth.register(username, password, role);
   }
 
-  public login(username: string, password: string) {
+  public login(username: string, password: string): void {
     this.auth.login(username, password);
   }
 
@@ -24,29 +22,25 @@ export class AuthBlog implements Blog {
     if (!this.auth.isAdmin()) {
       throw new Error('User cannot perform this operation.');
     }
-    return this.blog.getUsers();
+    return this.users.all();
   }
 
-  public getPages(): Page[] {
-    return this.blog.getPages();
-  }
-
-  public addPage(title: string, body: string) {
-    if (!this.auth.isAdmin()) {
-      throw new Error('User cannot perform this operation.');
+  public addPage(title: string, body: string): void {
+    try {
+      if (!this.auth.isAdmin()) {
+        throw new Error('User cannot perform this operation.');
+      }
+      this.blog.addPage(title, body);
+    } catch (error) {
+      throw error;
     }
-    this.blog.addPage(title, body);
   }
 
   public renderPage(id: string, nickname?: string): string {
     return this.blog.renderPage(id, nickname);
   }
 
-  public getPosts(user?: User): Post[] {
-    return this.blog.getPosts(user);
-  }
-
-  public addPost(title: string, body: string, date: Date) {
+  public addPost(title: string, body: string, date: Date): void {
     const username = this.auth.getUser().getUsername();
     return this.blog.addPost(title, body, date, username);
   }

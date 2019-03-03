@@ -1,7 +1,7 @@
 import { AuthBlog } from './AuthBlog';
 import { BaseBlog } from './BaseBlog';
 import { Blog } from './Blog';
-import { Users } from './Users';
+import { Users } from './service/Users';
 
 describe('Blog', () => {
   let blog: Blog;
@@ -13,143 +13,152 @@ describe('Blog', () => {
     (blog as AuthBlog).register('admin', 'admin', 'admin');
   });
 
-  it('should initialize with an admin user', () => {
-    (blog as AuthBlog).login('admin', 'admin');
-    expect(blog.getUsers().length).toBe(1);
+  describe('Initialization', () => {
+    it('should initialize with a sample homepage', () => {
+      expect(blog.renderPage('home')).toBe(
+        ['<h1>Home</h1>', '<div>Put some content here.</div>'].join(''),
+      );
+    });
+
+    it('should initialize with an empty post list', () => {
+      expect(blog.renderPage('featured-posts')).toBe(
+        ['<h1>Featured Posts</h1>', '<div>No posts yet.</div>'].join(''),
+      );
+    });
   });
 
-  it('should initialize with a sample homepage', () => {
-    expect(blog.renderPage('home')).toBe(`
-      <h1>Home</h1>
-      <div>Put some content here.</div>
-    `);
+  describe('Authentication', () => {
+    it('should sign in a registered user', () => {
+      const authBlog = blog as AuthBlog;
+
+      authBlog.login('admin', 'admin');
+      expect(authBlog.getUsers().length).toBe(1);
+    });
+
+    it('should not sign in a non-registered user', () => {
+      const authBlog = blog as AuthBlog;
+
+      expect(() => authBlog.login('blogger', 'blogger')).toThrow();
+    });
+
+    it('should not sign in with a wrong password', () => {
+      const authBlog = blog as AuthBlog;
+
+      expect(() => authBlog.login('admin', 'wrongpassword')).toThrow();
+    });
+
+    it('should throw an error if user looking for other users is not an admin', () => {
+      const authBlog = blog as AuthBlog;
+
+      authBlog.register('blogger', 'blogger');
+      authBlog.login('blogger', 'blogger');
+      expect(() => authBlog.getUsers().length).toThrow();
+    });
   });
 
-  it(`should initialize with an empty post list`, () => {
-    expect(blog.renderPage('featured-posts')).toBe(`
-      <h1>Featured Posts</h1>
-      <div>No posts yet.</div>
-    `);
+  describe('Pages', () => {
+    it('should add a new page', () => {
+      const authBlog = blog as AuthBlog;
+      authBlog.login('admin', 'admin');
+      blog.addPage('About', 'This is the about section.');
+
+      expect(blog.renderPage('about')).toBe(
+        ['<h1>About</h1>', '<div>This is the about section.</div>'].join(''),
+      );
+    });
+
+    it('should prevent adding a page if user is not signed in', () => {
+      expect(() =>
+        blog.addPage('About', 'This is the about section.'),
+      ).toThrow();
+    });
+
+    it('should prevent adding a page if user is not admin', () => {
+      const authBlog = blog as AuthBlog;
+      authBlog.register('blogger', 'blogger');
+      authBlog.login('blogger', 'blogger');
+
+      expect(() =>
+        blog.addPage('About', 'This is the about section.'),
+      ).toThrow();
+    });
   });
 
-  it('should initialize with no posts', () => {
-    expect(blog.getPosts().length).toBe(0);
+  describe('Posts', () => {
+    it('should add a new post', () => {
+      const authBlog = blog as AuthBlog;
+      authBlog.register('blogger', 'blogger');
+      authBlog.login('blogger', 'blogger');
+      blog.addPost(
+        'Hello world!',
+        'This is my first post.',
+        new Date('2019-02-25'),
+        'blogger',
+      );
+
+      expect(blog.renderPost('hello-world!')).toBe(
+        [
+          '<h1>Hello world!</h1>',
+          '<div>by blogger - 2019-2-25</div>',
+          '<div>This is my first post.</div>',
+        ].join(''),
+      );
+    });
+
+    it('should prevent adding a post if user is not signed in', () => {
+      expect(() => blog.renderPost('hello-world!')).toThrow();
+    });
   });
 
-  it('should register a new user', () => {
-    (blog as AuthBlog).login('admin', 'admin');
-    expect(blog.getUsers().length).toBe(1);
-  });
+  describe('Featured Posts', () => {
+    it('should list all posts', () => {
+      const authBlog = blog as AuthBlog;
+      authBlog.register('blogger', 'blogger');
+      authBlog.login('blogger', 'blogger');
+      blog.addPost(
+        'First!',
+        'This is my first post.',
+        new Date('2019-02-25'),
+        'blogger',
+      );
 
-  it('should add a new page', () => {
-    (blog as AuthBlog).login('admin', 'admin');
-    blog.addPage('About', 'This is the about section.');
+      expect(blog.renderPage('featured-posts')).toBe(
+        [
+          '<h1>Featured Posts</h1>',
+          '<h2>First!</h2>',
+          '<div>by blogger - 2019-2-25</div>',
+          '<div><a href="posts/first!"></a></div>',
+        ].join(''),
+      );
+    });
 
-    expect(blog.getPages().length).toBe(3);
-  });
+    it('should list all posts from a specific author', () => {
+      const authBlog = blog as AuthBlog;
+      authBlog.login('admin', 'admin');
+      blog.addPost(
+        'My Post',
+        'This is my post.',
+        new Date('2019-03-01'),
+        'admin',
+      );
 
-  it('should render a page', () => {
-    (blog as AuthBlog).login('admin', 'admin');
-    blog.addPage('Contact Us', 'Fill in the form below.');
+      authBlog.register('blogger', 'blogger');
+      authBlog.login('blogger', 'blogger');
+      blog.addPost(
+        'Your Post',
+        'This post is yours.',
+        new Date('2019-03-02'),
+        'blogger',
+      );
 
-    expect(blog.renderPage('contact-us')).toBe(`
-      <h1>Contact Us</h1>
-      <div>Fill in the form below.</div>
-    `);
-  });
-
-  it('should add a new post', () => {
-    (blog as AuthBlog).register('blogger', 'blogger');
-    (blog as AuthBlog).login('blogger', 'blogger');
-    blog.addPost(
-      'Hello world!',
-      'This is my first post.',
-      new Date('2019-02-25'),
-      'blogger',
-    );
-
-    expect(blog.getPosts().length).toBe(1);
-  });
-
-  it('should list all posts', () => {
-    (blog as AuthBlog).register('blogger', 'blogger');
-    (blog as AuthBlog).login('blogger', 'blogger');
-    blog.addPost(
-      'First!',
-      'This is my first post.',
-      new Date('2019-02-25'),
-      'blogger',
-    );
-
-    expect(blog.renderPage('featured-posts')).toBe(`
-      <h1>Featured Posts</h1>
-      <h2>First!</h2>
-      <div>by blogger - 2019-2-25</div>
-      <div><a href="posts/first!"></a></div>
-    `);
-  });
-
-  it('should list all posts from an author', () => {
-    (blog as AuthBlog).login('admin', 'admin');
-    blog.addPost(
-      'My Post',
-      'This is my post.',
-      new Date('2019-03-01'),
-      'admin',
-    );
-    (blog as AuthBlog).register('blogger', 'blogger');
-    (blog as AuthBlog).login('blogger', 'blogger');
-    blog.addPost(
-      'Your Post',
-      'This post is yours.',
-      new Date('2019-03-02'),
-      'blogger',
-    );
-
-    expect(blog.renderPage('featured-posts', 'blogger')).toBe(`
-      <h1>Featured Posts</h1>
-      <h2>Your Post</h2>
-      <div>by blogger - 2019-3-2</div>
-      <div><a href="posts/your-post"></a></div>
-    `);
-  });
-
-  it('should render a post', () => {
-    (blog as AuthBlog).register('blogger', 'blogger');
-    (blog as AuthBlog).login('blogger', 'blogger');
-    blog.addPost(
-      'Paradox',
-      'This post will not be rendered correctly.',
-      new Date('2019-02-25'),
-      'blogger',
-    );
-
-    expect(blog.renderPost('paradox')).toBe(`
-      <h1>Paradox</h1>
-      <div>by blogger - 2019-2-25</div>
-      <div>This post will not be rendered correctly.</div>
-    `);
-  });
-
-  it('should throw an error if user does not exist', () => {
-    expect(() => (blog as AuthBlog).login('blogger', 'blogger')).toThrow();
-  });
-
-  it('should throw an error if user logged in with wrong password', () => {
-    expect(() => (blog as AuthBlog).login('admin', 'wrongpassword')).toThrow();
-  });
-
-  it('should throw an error if user looking for other users is not an admin', () => {
-    (blog as AuthBlog).register('blogger', 'blogger');
-    (blog as AuthBlog).login('blogger', 'blogger');
-    expect(() => blog.getUsers()).toThrow();
-  });
-
-  it('should throw an error if user adding a page is not admin', () => {
-    (blog as AuthBlog).register('blogger', 'blogger');
-    (blog as AuthBlog).login('blogger', 'blogger');
-    expect(() =>
-      blog.addPage('This should not work', 'In fact, it does not.'),
-    ).toThrow();
+      expect(blog.renderPage('featured-posts', 'blogger')).toBe(
+        [
+          '<h1>Featured Posts</h1>',
+          '<h2>Your Post</h2>',
+          '<div>by blogger - 2019-3-2</div>',
+          '<div><a href="posts/your-post"></a></div>',
+        ].join(''),
+      );
+    });
   });
 });
