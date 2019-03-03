@@ -1,26 +1,25 @@
+import { Pages } from '../service/Pages';
+import { Posts } from '../service/Posts';
+import { Users } from '../service/Users';
 import { Blog } from './Blog';
-import { FeaturedPosts } from './domain/FeaturedPosts';
-import { Pages } from './service/Pages';
-import { Posts } from './service/Posts';
-import { Users } from './service/Users';
+import { FeaturedPosts } from './FeaturedPosts';
 
 export class BaseBlog implements Blog {
   private pages = new Pages();
   private posts = new Posts();
-  private featuredPostsPage: FeaturedPosts;
+  private featuredPosts: FeaturedPosts;
 
   constructor(private users: Users) {
-    this.featuredPostsPage = new FeaturedPosts(this.posts);
-    this.pages.addPage(this.featuredPostsPage);
+    this.featuredPosts = new FeaturedPosts(this.posts);
+    this.pages.addPage(this.featuredPosts);
   }
 
   public addPage(title: string, body: string): void {
     this.pages.add(title, body);
   }
 
-  public renderPage(id: string, nickname?: string): string {
-    const user = this.users.find(nickname);
-    return this.pages.render(id, user);
+  public renderPage(id: string): string {
+    return this.pages.render(id);
   }
 
   public addPost(
@@ -35,5 +34,10 @@ export class BaseBlog implements Blog {
 
   public renderPost(id: string): string {
     return this.posts.render(id);
+  }
+
+  public renderFeaturedPosts(author?: string): string {
+    const user = this.users.find(author);
+    return this.featuredPosts.render(user);
   }
 }

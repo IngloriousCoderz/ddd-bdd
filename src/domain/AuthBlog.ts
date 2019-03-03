@@ -1,7 +1,7 @@
+import { Auth } from '../service/Auth';
+import { Users } from '../service/Users';
 import { Blog } from './Blog';
-import { User } from './domain/User';
-import { Auth } from './service/Auth';
-import { Users } from './service/Users';
+import { User } from './User';
 
 export class AuthBlog implements Blog {
   private auth: Auth;
@@ -18,6 +18,10 @@ export class AuthBlog implements Blog {
     this.auth.login(username, password);
   }
 
+  public logout(): void {
+    this.auth.logout();
+  }
+
   public getUsers(): User[] {
     if (!this.auth.isAdmin()) {
       throw new Error('User cannot perform this operation.');
@@ -26,18 +30,14 @@ export class AuthBlog implements Blog {
   }
 
   public addPage(title: string, body: string): void {
-    try {
-      if (!this.auth.isAdmin()) {
-        throw new Error('User cannot perform this operation.');
-      }
-      this.blog.addPage(title, body);
-    } catch (error) {
-      throw error;
+    if (!this.auth.isAdmin()) {
+      throw new Error('User cannot perform this operation.');
     }
+    this.blog.addPage(title, body);
   }
 
-  public renderPage(id: string, nickname?: string): string {
-    return this.blog.renderPage(id, nickname);
+  public renderPage(id: string): string {
+    return this.blog.renderPage(id);
   }
 
   public addPost(title: string, body: string, date: Date): void {
@@ -47,5 +47,9 @@ export class AuthBlog implements Blog {
 
   public renderPost(id: string): string {
     return this.blog.renderPost(id);
+  }
+
+  public renderFeaturedPosts(author?: string): string {
+    return this.blog.renderFeaturedPosts(author);
   }
 }

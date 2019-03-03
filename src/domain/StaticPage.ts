@@ -1,6 +1,5 @@
 import { toId } from '../service/utils';
 import { Page } from './Page';
-import { User } from './User';
 
 export class StaticPage implements Page {
   private id: string;
@@ -21,7 +20,7 @@ export class StaticPage implements Page {
     return this.body;
   }
 
-  public render(user?: User): string {
+  public render(): string {
     return [
       `<h1>${this.getTitle()}</h1>`, // HACK: this comment is here just to keep indentation
       `<div>${this.getBody()}</div>`,

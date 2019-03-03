@@ -1,3 +1,4 @@
 node_modules
 coverage
 jest_html_reporters.html
+test-report.html

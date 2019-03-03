@@ -5,10 +5,6 @@ import { User } from '../domain/User';
 export class Pages {
   private pages: Page[] = [];
 
-  constructor() {
-    this.pages.push(new StaticPage('Home', 'Put some content here.'));
-  }
-
   public find(id: string, user?: User): Page {
     return this.pages.find(page => page.getId() === id);
   }

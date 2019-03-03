@@ -20,22 +20,22 @@ export class FeaturedPosts implements Page {
     return this.title;
   }
 
-  public getBody(user?: User): string {
-    return this.getPosts(user)
+  public getBody(author?: User): string {
+    return this.getPosts(author)
       .map(this.getPostBody)
       .join('');
   }
 
-  public getPosts(user?: User): Post[] {
-    return this.posts.all(user);
-  }
-
-  public render(user?: User): string {
-    const body = this.getBody(user).trim();
+  public render(author?: User): string {
+    const body = this.getBody(author).trim();
     return [
       `<h1>${this.getTitle()}</h1>`,
       `${body.length ? body : '<div>No posts yet.</div>'}`,
     ].join('');
+  }
+
+  private getPosts(author?: User): Post[] {
+    return this.posts.all(author);
   }
 
   private getPostBody(post: Post): string {

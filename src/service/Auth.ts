@@ -21,6 +21,10 @@ export class Auth {
     this.user = user;
   }
 
+  public logout(): void {
+    this.user = null;
+  }
+
   public getUser(): User {
     return this.user;
   }
