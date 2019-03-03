@@ -1,8 +1,10 @@
 export interface Blog {
-  addPage(title: string, body: string): void;
+  renderAddPage(): string;
+  addPage(title: string, body: string): string;
   renderPage(id: string): string;
 
-  addPost(title: string, body: string, date: Date, author: string): void;
+  renderAddPost(): string;
+  addPost(title: string, body: string, date: Date, author?: string): string;
   renderPost(id: string): string;
 
   renderFeaturedPosts(author?: string): string;

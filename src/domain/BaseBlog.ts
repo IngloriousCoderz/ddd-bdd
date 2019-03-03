@@ -11,16 +11,40 @@ export class BaseBlog implements Blog {
 
   constructor(private users: Users) {
     this.addPage('Home', 'Put some content here.');
-    this.featuredPosts = new FeaturedPosts(this.posts);
+    this.featuredPosts = new FeaturedPosts(this.posts, users);
     this.pages.addPage(this.featuredPosts);
   }
 
-  public addPage(title: string, body: string): void {
-    this.pages.add(title, body);
+  public renderAddPage(): string {
+    const renderedPage = [
+      '<h1>Add Page</h1>',
+      '<form action="/add-page" method="POST">',
+      '<label>Title</label><input name="title" autofocus autocomplete="off" /><br/>',
+      '<label>Body</label><textarea name="body" rows="8" cols="26"></textarea><br/>',
+      '<button type="submit">Add Page</button>',
+      '</form>',
+    ].join('');
+    return this.renderLayout(renderedPage);
+  }
+
+  public addPage(title: string, body: string): string {
+    return this.pages.add(title, body);
   }
 
   public renderPage(id: string): string {
     const renderedPage = this.pages.render(id);
+    return this.renderLayout(renderedPage);
+  }
+
+  public renderAddPost(): string {
+    const renderedPage = [
+      '<h1>Add Post</h1>',
+      '<form action="/add-post" method="POST">',
+      '<label>Title</label><input name="title" autofocus autocomplete="off" /><br/>',
+      '<label>Body</label><textarea name="body" rows="8" cols="26"></textarea><br/>',
+      '<button type="submit">Add Post</button>',
+      '</form>',
+    ].join('');
     return this.renderLayout(renderedPage);
   }
 
@@ -29,48 +53,35 @@ export class BaseBlog implements Blog {
     body: string,
     date: Date,
     author: string,
-  ): void {
+  ): string {
     const user = this.users.find(author);
-    this.posts.add(title, body, date, user);
+    return this.posts.add(title, body, date, user);
   }
 
   public renderPost(id: string): string {
-    const renderedPost = this.posts.render(id);
-    return this.renderLayout(renderedPost);
+    const renderedPage = this.posts.render(id);
+    return this.renderLayout(renderedPage);
   }
 
   public renderFeaturedPosts(author?: string): string {
     const user = this.users.find(author);
-    const renderedFeaturedPosts = this.featuredPosts.render(user);
-    return this.renderLayout(renderedFeaturedPosts);
+    const renderedPage = this.featuredPosts.render(user);
+    return this.renderLayout(renderedPage);
   }
 
   private renderLayout(renderedPage: string): string {
-    return [
-      '<html>',
-      '<body>',
-      this.renderNav(),
-      renderedPage,
-      '</body>',
-      '</html>',
-    ].join('');
+    return [this.renderNav(), '<main>', renderedPage, '</main>'].join('');
   }
 
   private renderNav(): string {
     return [
-      '<nav>',
-      '<ul>',
+      '<nav><ul>',
       ...this.pages.all().map(this.renderLink),
-      '</ul>',
-      '</nav>',
+      '</ul></nav>',
     ].join('');
   }
 
   private renderLink(page): string {
-    return [
-      '<li>',
-      `<a href="pages/${page.id}>${page.title}</a>`,
-      '</li>',
-    ].join('');
+    return [`<li><a href="/pages/${page.id}">${page.title}</a></li>`].join('');
   }
 }

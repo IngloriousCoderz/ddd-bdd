@@ -36,9 +36,11 @@ export class Post implements Page {
 
   public render(): string {
     return [
+      '<article>',
       `<h1>${this.getTitle()}</h1>`,
-      `<div>by ${this.getAuthor().toString()} - ${this.getDate()}</div>`,
+      `<div class="sub">by ${this.getAuthor().toString()} - ${this.getDate()}</div>`,
       `<div>${this.getBody()}</div>`,
+      '</article>',
     ].join('');
   }
 }

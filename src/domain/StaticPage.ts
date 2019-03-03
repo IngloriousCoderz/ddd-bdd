@@ -22,8 +22,10 @@ export class StaticPage implements Page {
 
   public render(): string {
     return [
+      '<article>',
       `<h1>${this.getTitle()}</h1>`, // HACK: this comment is here just to keep indentation
       `<div>${this.getBody()}</div>`,
+      '</article>',
     ].join('');
   }
 }

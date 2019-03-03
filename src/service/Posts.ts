@@ -16,9 +16,10 @@ export class Posts {
     return this.posts.find(post => post.getId() === id);
   }
 
-  public add(title: string, body: string, date: Date, author: User): void {
+  public add(title: string, body: string, date: Date, author: User): string {
     const post = new Post(title, body, date, author);
     this.posts.push(post);
+    return post.getId();
   }
 
   public render(id: string): string {

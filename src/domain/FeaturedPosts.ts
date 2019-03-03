@@ -1,4 +1,5 @@
 import { Posts } from '../service/Posts';
+import { Users } from '../service/Users';
 import { toId } from '../service/utils';
 import { Page } from './Page';
 import { Post } from './Post';
@@ -8,7 +9,7 @@ export class FeaturedPosts implements Page {
   private id: string;
   private title = 'Featured Posts';
 
-  constructor(private posts: Posts) {
+  constructor(private posts: Posts, private users: Users) {
     this.id = toId(this.title);
   }
 
@@ -29,8 +30,13 @@ export class FeaturedPosts implements Page {
   public render(author?: User): string {
     const body = this.getBody(author).trim();
     return [
+      '<article>',
       `<h1>${this.getTitle()}</h1>`,
-      `${body.length ? body : '<div>No posts yet.</div>'}`,
+      '<div>Filter: <a href="/pages/featured-posts?author=">all</a>',
+      ...this.users.all().map(this.getUserLink),
+      '</div>',
+      '</article>',
+      `${body.length ? body : '<article>No posts yet.</article>'}`,
     ].join('');
   }
 
@@ -40,9 +46,17 @@ export class FeaturedPosts implements Page {
 
   private getPostBody(post: Post): string {
     return [
+      '<article>',
       `<h2>${post.getTitle()}</h2>`,
-      `<div>by ${post.getAuthor().toString()} - ${post.getDate()}</div>`,
-      `<div><a href="posts/${post.getId()}"></a></div>`,
+      `<div class="sub">by ${post
+        .getAuthor()
+        .toString()} - ${post.getDate()}</div>`,
+      `<div class="text-right"><a href="/posts/${post.getId()}">read more&rsaquo;</a></div>`,
+      '</article>',
     ].join('');
+  }
+
+  private getUserLink(user) {
+    return `<a href="/pages/featured-posts?author=${user.getUsername()}">${user.getUsername()}</a>`;
   }
 }
