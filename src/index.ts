@@ -10,9 +10,5 @@ export default function createBlog() {
 
   const authBlog = blog as AuthBlog;
   authBlog.register('admin', 'admin', 'admin');
-
-  authBlog.login('admin', 'admin');
-  blog.addPage('Home', 'Put some content here.');
-  authBlog.logout();
   return blog;
 }

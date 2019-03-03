@@ -19,13 +19,31 @@ describe('Blog', () => {
 
     it('should initialize with a sample homepage', () => {
       expect(blog.renderPage('home')).toBe(
-        ['<h1>Home</h1>', '<div>Put some content here.</div>'].join(''),
+        [
+          '<html><body>',
+          '<nav><ul>',
+          '<li><a href="pages/home>Home</a></li>',
+          '<li><a href="pages/featured-posts>Featured Posts</a></li>',
+          '</ul></nav>',
+          '<h1>Home</h1>',
+          '<div>Put some content here.</div>',
+          '</body></html>',
+        ].join(''),
       );
     });
 
     it('should initialize with an empty post list', () => {
       expect(blog.renderPage('featured-posts')).toBe(
-        ['<h1>Featured Posts</h1>', '<div>No posts yet.</div>'].join(''),
+        [
+          '<html><body>',
+          '<nav><ul>',
+          '<li><a href="pages/home>Home</a></li>',
+          '<li><a href="pages/featured-posts>Featured Posts</a></li>',
+          '</ul></nav>',
+          '<h1>Featured Posts</h1>',
+          '<div>No posts yet.</div>',
+          '</body></html>',
+        ].join(''),
       );
     });
   });
@@ -75,7 +93,17 @@ describe('Blog', () => {
       blog.addPage('About', 'This is the about section.');
 
       expect(blog.renderPage('about')).toBe(
-        ['<h1>About</h1>', '<div>This is the about section.</div>'].join(''),
+        [
+          '<html><body>',
+          '<nav><ul>',
+          '<li><a href="pages/home>Home</a></li>',
+          '<li><a href="pages/featured-posts>Featured Posts</a></li>',
+          '<li><a href="pages/about>About</a></li>',
+          '</ul></nav>',
+          '<h1>About</h1>',
+          '<div>This is the about section.</div>',
+          '</body></html>',
+        ].join(''),
       );
     });
 
@@ -110,9 +138,15 @@ describe('Blog', () => {
 
       expect(blog.renderPost('hello-world!')).toBe(
         [
+          '<html><body>',
+          '<nav><ul>',
+          '<li><a href="pages/home>Home</a></li>',
+          '<li><a href="pages/featured-posts>Featured Posts</a></li>',
+          '</ul></nav>',
           '<h1>Hello world!</h1>',
           '<div>by blogger - 2019-2-25</div>',
           '<div>This is my first post.</div>',
+          '</body></html>',
         ].join(''),
       );
     });
@@ -135,10 +169,16 @@ describe('Blog', () => {
 
       expect(blog.renderFeaturedPosts()).toBe(
         [
+          '<html><body>',
+          '<nav><ul>',
+          '<li><a href="pages/home>Home</a></li>',
+          '<li><a href="pages/featured-posts>Featured Posts</a></li>',
+          '</ul></nav>',
           '<h1>Featured Posts</h1>',
           '<h2>First!</h2>',
           '<div>by admin - 2019-2-25</div>',
           '<div><a href="posts/first!"></a></div>',
+          '</body></html>',
         ].join(''),
       );
     });
@@ -155,10 +195,16 @@ describe('Blog', () => {
 
       expect(blog.renderPage('featured-posts')).toBe(
         [
+          '<html><body>',
+          '<nav><ul>',
+          '<li><a href="pages/home>Home</a></li>',
+          '<li><a href="pages/featured-posts>Featured Posts</a></li>',
+          '</ul></nav>',
           '<h1>Featured Posts</h1>',
           '<h2>First!</h2>',
           '<div>by admin - 2019-2-25</div>',
           '<div><a href="posts/first!"></a></div>',
+          '</body></html>',
         ].join(''),
       );
     });
@@ -184,10 +230,16 @@ describe('Blog', () => {
 
       expect(blog.renderFeaturedPosts('blogger')).toBe(
         [
+          '<html><body>',
+          '<nav><ul>',
+          '<li><a href="pages/home>Home</a></li>',
+          '<li><a href="pages/featured-posts>Featured Posts</a></li>',
+          '</ul></nav>',
           '<h1>Featured Posts</h1>',
           '<h2>Your Post</h2>',
           '<div>by blogger - 2019-3-2</div>',
           '<div><a href="posts/your-post"></a></div>',
+          '</body></html>',
         ].join(''),
       );
     });

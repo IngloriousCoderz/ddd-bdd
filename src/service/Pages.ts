@@ -5,6 +5,10 @@ import { User } from '../domain/User';
 export class Pages {
   private pages: Page[] = [];
 
+  public all(): Page[] {
+    return this.pages;
+  }
+
   public find(id: string, user?: User): Page {
     return this.pages.find(page => page.getId() === id);
   }
@@ -18,8 +22,8 @@ export class Pages {
     this.pages.push(page);
   }
 
-  public render(id: string, user?: User): string {
-    const page = this.find(id, user);
-    return page.render(user);
+  public render(id: string): string {
+    const page = this.find(id);
+    return page.render();
   }
 }

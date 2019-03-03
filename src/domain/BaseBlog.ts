@@ -10,6 +10,7 @@ export class BaseBlog implements Blog {
   private featuredPosts: FeaturedPosts;
 
   constructor(private users: Users) {
+    this.addPage('Home', 'Put some content here.');
     this.featuredPosts = new FeaturedPosts(this.posts);
     this.pages.addPage(this.featuredPosts);
   }
@@ -19,7 +20,8 @@ export class BaseBlog implements Blog {
   }
 
   public renderPage(id: string): string {
-    return this.pages.render(id);
+    const renderedPage = this.pages.render(id);
+    return this.renderLayout(renderedPage);
   }
 
   public addPost(
@@ -33,11 +35,42 @@ export class BaseBlog implements Blog {
   }
 
   public renderPost(id: string): string {
-    return this.posts.render(id);
+    const renderedPost = this.posts.render(id);
+    return this.renderLayout(renderedPost);
   }
 
   public renderFeaturedPosts(author?: string): string {
     const user = this.users.find(author);
-    return this.featuredPosts.render(user);
+    const renderedFeaturedPosts = this.featuredPosts.render(user);
+    return this.renderLayout(renderedFeaturedPosts);
+  }
+
+  private renderLayout(renderedPage: string): string {
+    return [
+      '<html>',
+      '<body>',
+      this.renderNav(),
+      renderedPage,
+      '</body>',
+      '</html>',
+    ].join('');
+  }
+
+  private renderNav(): string {
+    return [
+      '<nav>',
+      '<ul>',
+      ...this.pages.all().map(this.renderLink),
+      '</ul>',
+      '</nav>',
+    ].join('');
+  }
+
+  private renderLink(page): string {
+    return [
+      '<li>',
+      `<a href="pages/${page.id}>${page.title}</a>`,
+      '</li>',
+    ].join('');
   }
 }
