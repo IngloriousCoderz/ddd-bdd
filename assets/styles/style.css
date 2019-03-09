@@ -57,6 +57,7 @@ nav:last-child > ul {
 }
 
 nav a,
+nav span,
 article > div > a {
   display: inline-block;
   padding: 1rem;

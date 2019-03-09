@@ -120,19 +120,34 @@ export class AuthBlog implements Blog {
   }
 
   private renderLayout(renderedPage: string): string {
-    return [
-      '<nav><ul>',
-      '<li><a href="/register">Sign On</a></li>',
-      `<li><a${!this.auth.getUser() ? ' href="/login"' : ''}>Sign In</a></li>`,
-      `<li><a${this.auth.getUser() ? ' href="/logout"' : ''}>Sign out</a></li>`,
-      '</ul></nav>',
-      renderedPage,
-      '<nav><ul>',
-      this.auth.getUser() && this.auth.isAdmin()
-        ? '<li><a href="/add-page">Add Page</a></li>'
-        : '',
-      this.auth.getUser() ? '<li><a href="/add-post">Add Post</a></li>' : '',
-      '</ul></nav>',
-    ].join('')
+    const user = this.auth.getUser()
+
+    let layout = ['<nav><ul>']
+
+    if (user != null) {
+      layout = [
+        ...layout,
+        `<li><span>Welcome, ${user.getUsername()}!</span></li>`,
+        '<li><a href="/logout">Sign out</a></li>',
+      ]
+    } else {
+      layout = [
+        ...layout,
+        '<li><a href="/register">Sign On</a></li>',
+        '<li><a href="/login">Sign In</a></li>',
+      ]
+    }
+
+    layout = [...layout, '</ul></nav>', renderedPage, '<nav><ul>']
+
+    if (user != null) {
+      layout = [
+        ...layout,
+        this.auth.isAdmin() ? '<li><a href="/add-page">Add Page</a></li>' : '',
+        '<li><a href="/add-post">Add Post</a></li>',
+      ]
+    }
+
+    return [...layout, '</ul></nav>'].join('')
   }
 }

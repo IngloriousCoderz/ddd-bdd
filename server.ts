@@ -115,10 +115,10 @@ function populate() {
     'Contacts',
     '<p>Contact us by dropping a mail <a href="mailto:antony.mistretta@gmail.com">here</a>.</p>',
   )
+  blog.addPost('First', '<p>This is my first post!</p>', new Date())
 
   authBlog.register('blogger', 'blogger')
   authBlog.login('blogger', 'blogger')
-  blog.addPost('First', '<p>This is my first post!</p>', new Date())
   blog.addPost(
     'The Art Of Blogging',
     '<p>First of all, build a blog from scratch.</p>',
