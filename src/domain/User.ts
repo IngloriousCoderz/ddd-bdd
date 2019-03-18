@@ -16,8 +16,4 @@ export class User {
   public getRole(): string {
     return this.role
   }
-
-  public toString(): string {
-    return this.username
-  }
 }

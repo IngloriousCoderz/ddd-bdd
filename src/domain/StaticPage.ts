@@ -12,19 +12,11 @@ export class StaticPage implements Page {
     return this.id
   }
 
-  public getTitle(): string {
-    return this.title
-  }
-
-  public getBody(): string {
-    return this.body
-  }
-
   public render(): string {
     return [
       '<article>',
-      `<h1>${this.getTitle()}</h1>`, // HACK: this comment is here just to keep indentation
-      `<div>${this.getBody()}</div>`,
+      `<h1>${this.title}</h1>`,
+      `<div>${this.body}</div>`,
       '</article>',
     ].join('')
   }

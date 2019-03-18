@@ -17,42 +17,20 @@ export class FeaturedPosts implements Page {
     return this.id
   }
 
-  public getTitle(): string {
-    return this.title
-  }
-
-  public getBody(author?: User): string {
-    return this.getPosts(author)
-      .map(this.getPostBody)
-      .join('')
-  }
-
   public render(author?: User): string {
-    const body = this.getBody(author).trim()
+    const body = this.posts
+      .all(author)
+      .map(post => post.renderPreview())
+      .join('')
+
     return [
       '<article>',
-      `<h1>${this.getTitle()}</h1>`,
+      `<h1>${this.title}</h1>`,
       '<div>Filter: <a href="/pages/featured-posts?author=">all</a>',
       ...this.users.all().map(this.getUserLink),
       '</div>',
       '</article>',
       `${body.length ? body : '<article>No posts yet.</article>'}`,
-    ].join('')
-  }
-
-  private getPosts(author?: User): Post[] {
-    return this.posts.all(author)
-  }
-
-  private getPostBody(post: Post): string {
-    return [
-      '<article>',
-      `<h2>${post.getTitle()}</h2>`,
-      `<div class="sub">by ${post
-        .getAuthor()
-        .toString()} - ${post.getDate()}</div>`,
-      `<div class="text-right"><a href="/posts/${post.getId()}">read more&rsaquo;</a></div>`,
-      '</article>',
     ].join('')
   }
 

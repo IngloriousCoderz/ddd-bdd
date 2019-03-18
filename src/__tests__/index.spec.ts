@@ -23,7 +23,6 @@ describe('Blog', () => {
           '<nav><ul>',
           '<li><a href="/register">Sign On</a></li>',
           '<li><a href="/login">Sign In</a></li>',
-          '<li><a>Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
           '<li><a href="/pages/home">Home</a></li>',
@@ -46,7 +45,6 @@ describe('Blog', () => {
           '<nav><ul>',
           '<li><a href="/register">Sign On</a></li>',
           '<li><a href="/login">Sign In</a></li>',
-          '<li><a>Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
           '<li><a href="/pages/home">Home</a></li>',
@@ -75,7 +73,6 @@ describe('Blog', () => {
           '<nav><ul>',
           '<li><a href="/register">Sign On</a></li>',
           '<li><a href="/login">Sign In</a></li>',
-          '<li><a>Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
           '<li><a href="javascript:history.back()">Back</a></li>',
@@ -107,7 +104,6 @@ describe('Blog', () => {
           '<nav><ul>',
           '<li><a href="/register">Sign On</a></li>',
           '<li><a href="/login">Sign In</a></li>',
-          '<li><a>Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
           '<li><a href="javascript:history.back()">Back</a></li>',
@@ -156,8 +152,7 @@ describe('Blog', () => {
       expect(blog.renderAddPage()).toBe(
         [
           '<nav><ul>',
-          '<li><a href="/register">Sign On</a></li>',
-          '<li><a>Sign In</a></li>',
+          '<li><span>Welcome, admin!</span></li>',
           '<li><a href="/logout">Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
@@ -191,15 +186,14 @@ describe('Blog', () => {
       expect(() => blog.renderAddPage()).toThrow()
     })
 
-    it('should add a new page', () => {
+    it('should add a new page is user is an admin', () => {
       authBlog.login('admin', 'admin')
       blog.addPage('About', 'This is the about section.')
 
       expect(blog.renderPage('about')).toBe(
         [
           '<nav><ul>',
-          '<li><a href="/register">Sign On</a></li>',
-          '<li><a>Sign In</a></li>',
+          '<li><span>Welcome, admin!</span></li>',
           '<li><a href="/logout">Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
@@ -245,8 +239,7 @@ describe('Blog', () => {
       expect(blog.renderAddPost()).toBe(
         [
           '<nav><ul>',
-          '<li><a href="/register">Sign On</a></li>',
-          '<li><a>Sign In</a></li>',
+          '<li><span>Welcome, blogger!</span></li>',
           '<li><a href="/logout">Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
@@ -272,7 +265,7 @@ describe('Blog', () => {
       expect(() => blog.renderAddPost()).toThrow()
     })
 
-    it('should add a new post', () => {
+    it('should add a new post if user is signed in', () => {
       authBlog.register('blogger', 'blogger')
       authBlog.login('blogger', 'blogger')
       blog.addPost(
@@ -285,8 +278,7 @@ describe('Blog', () => {
       expect(blog.renderPost('hello-world!')).toBe(
         [
           '<nav><ul>',
-          '<li><a href="/register">Sign On</a></li>',
-          '<li><a>Sign In</a></li>',
+          '<li><span>Welcome, blogger!</span></li>',
           '<li><a href="/logout">Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
@@ -307,13 +299,20 @@ describe('Blog', () => {
       )
     })
 
-    it('should prevent adding a post if user is not signed in', () => {
-      expect(() => blog.renderPost('hello-world!')).toThrow()
+    it('should prevent unauthenticated users from adding a post', () => {
+      expect(() =>
+        blog.addPost(
+          'Hello world!',
+          'This is my first post.',
+          new Date('2019-02-25'),
+          'blogger',
+        ),
+      ).toThrow()
     })
   })
 
   describe('Featured Posts', () => {
-    it('should list all posts', () => {
+    it('should render the "Featured Posts" page', () => {
       authBlog.login('admin', 'admin')
       blog.addPost(
         'First!',
@@ -325,8 +324,7 @@ describe('Blog', () => {
       expect(blog.renderFeaturedPosts()).toBe(
         [
           '<nav><ul>',
-          '<li><a href="/register">Sign On</a></li>',
-          '<li><a>Sign In</a></li>',
+          '<li><span>Welcome, admin!</span></li>',
           '<li><a href="/logout">Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
@@ -355,7 +353,7 @@ describe('Blog', () => {
       )
     })
 
-    it('should render featured posts as a page', () => {
+    it('should render "Featured Posts" as any other page', () => {
       authBlog.login('admin', 'admin')
       blog.addPost(
         'First!',
@@ -367,8 +365,7 @@ describe('Blog', () => {
       expect(blog.renderPage('featured-posts')).toBe(
         [
           '<nav><ul>',
-          '<li><a href="/register">Sign On</a></li>',
-          '<li><a>Sign In</a></li>',
+          '<li><span>Welcome, admin!</span></li>',
           '<li><a href="/logout">Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
@@ -418,8 +415,7 @@ describe('Blog', () => {
       expect(blog.renderFeaturedPosts('blogger')).toBe(
         [
           '<nav><ul>',
-          '<li><a href="/register">Sign On</a></li>',
-          '<li><a>Sign In</a></li>',
+          '<li><span>Welcome, blogger!</span></li>',
           '<li><a href="/logout">Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
@@ -456,7 +452,6 @@ describe('Blog', () => {
           '<nav><ul>',
           '<li><a href="/register">Sign On</a></li>',
           '<li><a href="/login">Sign In</a></li>',
-          '<li><a>Sign out</a></li>',
           '</ul></nav>',
           '<nav><ul>',
           '<li><a href="javascript:history.back()">Back</a></li>',

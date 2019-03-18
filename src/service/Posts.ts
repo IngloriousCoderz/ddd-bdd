@@ -6,9 +6,7 @@ export class Posts {
 
   public all(user?: User): Post[] {
     return user
-      ? this.posts.filter(
-          post => post.getAuthor().getUsername() === user.getUsername(),
-        )
+      ? this.posts.filter(post => post.getAuthorName() === user.getUsername())
       : this.posts
   }
 

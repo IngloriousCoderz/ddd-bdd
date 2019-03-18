@@ -58,6 +58,9 @@ export class AuthBlog implements Blog {
   }
 
   public addPost(title: string, body: string, date: Date): string {
+    if (this.auth.getUser() == null) {
+      throw new Error('You must be logged in.')
+    }
     const username = this.auth.getUser().getUsername()
     return this.blog.addPost(title, body, date, username)
   }

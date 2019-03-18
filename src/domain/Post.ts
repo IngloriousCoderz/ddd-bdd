@@ -18,29 +18,33 @@ export class Post implements Page {
     return this.id
   }
 
-  public getTitle(): string {
-    return this.title
-  }
-
-  public getBody(): string {
-    return this.body
-  }
-
-  public getAuthor(): User {
-    return this.author
-  }
-
-  public getDate(): string {
-    return this.date.toLocaleDateString()
+  public renderPreview(): string {
+    return [
+      '<article>',
+      `<h2>${this.title}</h2>`,
+      `<div class="sub">by ${this.getAuthorName()} - ${this.formatDate()}</div>`,
+      `<div class="text-right"><a href="/posts/${
+        this.id
+      }">read more&rsaquo;</a></div>`,
+      '</article>',
+    ].join('')
   }
 
   public render(): string {
     return [
       '<article>',
-      `<h1>${this.getTitle()}</h1>`,
-      `<div class="sub">by ${this.getAuthor().toString()} - ${this.getDate()}</div>`,
-      `<div>${this.getBody()}</div>`,
+      `<h1>${this.title}</h1>`,
+      `<div class="sub">by ${this.getAuthorName()} - ${this.formatDate()}</div>`,
+      `<div>${this.body}</div>`,
       '</article>',
     ].join('')
+  }
+
+  public getAuthorName() {
+    return this.author.getUsername()
+  }
+
+  private formatDate(): string {
+    return this.date.toLocaleDateString()
   }
 }
