@@ -2,7 +2,6 @@ import { Posts } from '../service/Posts'
 import { Users } from '../service/Users'
 import { toId } from '../service/utils'
 import { Page } from './Page'
-import { Post } from './Post'
 import { User } from './User'
 
 export class FeaturedPosts implements Page {
