@@ -1,12 +1,13 @@
-import { Auth } from '../service/Auth'
-import { Users } from '../service/Users'
+import { Auth } from '../../service/Auth'
+import { UserRepository } from '../../service/UserRepository'
+import { Page } from '../Page'
+import { User } from '../User'
 import { Blog } from './Blog'
-import { User } from './User'
 
 export class AuthBlog implements Blog {
   private auth: Auth
 
-  constructor(private blog: Blog, private users: Users) {
+  constructor(private blog: Blog, private users: UserRepository) {
     this.auth = new Auth(users)
   }
 
@@ -42,6 +43,10 @@ export class AuthBlog implements Blog {
       throw new Error('You cannot perform this operation.')
     }
     return this.blog.addPage(title, body)
+  }
+
+  public getPages(): Page[] {
+    return this.blog.getPages()
   }
 
   public renderPage(id: string): string {

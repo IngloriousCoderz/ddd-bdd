@@ -1,6 +1,6 @@
 import { User } from '../domain/User'
 
-export class Users {
+export class UserRepository {
   private users: User[] = []
 
   public all(): User[] {

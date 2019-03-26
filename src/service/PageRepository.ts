@@ -1,7 +1,7 @@
 import { Page } from '../domain/Page'
 import { StaticPage } from '../domain/StaticPage'
 
-export class Pages {
+export class PageRepository {
   private pages: Page[] = []
 
   public all(): Page[] {

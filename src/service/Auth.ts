@@ -1,10 +1,10 @@
 import { User } from '../domain/User'
-import { Users } from './Users'
+import { UserRepository } from './UserRepository'
 
 export class Auth {
   private user: User
 
-  constructor(private users: Users) {}
+  constructor(private users: UserRepository) {}
 
   public register(username: string, password: string, role?: string): void {
     this.users.add(username, password, role)

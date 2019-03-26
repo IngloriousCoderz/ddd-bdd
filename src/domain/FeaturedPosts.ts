@@ -1,5 +1,5 @@
-import { Posts } from '../service/Posts'
-import { Users } from '../service/Users'
+import { PostRepository } from '../service/PostRepository'
+import { UserRepository } from '../service/UserRepository'
 import { toId } from '../service/utils'
 import { Page } from './Page'
 import { User } from './User'
@@ -8,12 +8,16 @@ export class FeaturedPosts implements Page {
   private id: string
   private title = 'Featured Posts'
 
-  constructor(private posts: Posts, private users: Users) {
+  constructor(private posts: PostRepository, private users: UserRepository) {
     this.id = toId(this.title)
   }
 
   public getId(): string {
     return this.id
+  }
+
+  public getTitle(): string {
+    return this.title
   }
 
   public render(author?: User): string {

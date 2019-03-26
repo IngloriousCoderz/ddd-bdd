@@ -1,8 +1,7 @@
 import { toId } from '../service/utils'
-import { Page } from './Page'
 import { User } from './User'
 
-export class Post implements Page {
+export class Post {
   private id: string
 
   constructor(

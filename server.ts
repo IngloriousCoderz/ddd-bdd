@@ -3,7 +3,7 @@ import express from 'express'
 import mung from 'express-mung'
 
 import createBlog from './src'
-import { AuthBlog } from './src/domain/AuthBlog'
+import { AuthBlog } from './src/domain/blog/AuthBlog'
 
 const app = express()
 app.use('/assets', express.static('assets'))

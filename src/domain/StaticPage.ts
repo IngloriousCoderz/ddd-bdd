@@ -12,6 +12,10 @@ export class StaticPage implements Page {
     return this.id
   }
 
+  public getTitle(): string {
+    return this.title
+  }
+
   public render(): string {
     return [
       '<article>',

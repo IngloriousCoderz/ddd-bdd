@@ -1,6 +1,6 @@
-import createBlog from '..'
-import { AuthBlog } from '../domain/AuthBlog'
-import { Blog } from '../domain/Blog'
+import createBlog, { createAlternativeBlog } from '..'
+import { AuthBlog } from '../domain/blog/AuthBlog'
+import { Blog } from '../domain/blog/Blog'
 
 describe('Blog', () => {
   let blog: Blog
@@ -465,5 +465,31 @@ describe('Blog', () => {
         ].join(''),
       )
     })
+  })
+})
+
+describe('Alternative Layout', () => {
+  it('should render an alternative layout', () => {
+    const blog: Blog = createAlternativeBlog()
+    expect(blog.renderPage('home')).toBe(
+      [
+        '<nav><ul>',
+        '<li><a href="/pages/home">Home</a></li>',
+        '<li><a href="/pages/featured-posts">Featured Posts</a></li>',
+        '</ul></nav>',
+        '<main>',
+        '<nav><ul>',
+        '<li><a href="/register">Sign On</a></li>',
+        '<li><a href="/login">Sign In</a></li>',
+        '</ul></nav>',
+        '<article>',
+        '<h1>Home</h1>',
+        '<div>Put some content here.</div>',
+        '</article>',
+        '<nav><ul>',
+        '</ul></nav>',
+        '</main>',
+      ].join(''),
+    )
   })
 })

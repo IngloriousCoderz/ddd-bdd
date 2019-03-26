@@ -1,7 +1,7 @@
 import { Post } from '../domain/Post'
 import { User } from '../domain/User'
 
-export class Posts {
+export class PostRepository {
   private posts: Post[] = []
 
   public all(user?: User): Post[] {
