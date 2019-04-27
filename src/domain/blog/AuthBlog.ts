@@ -1,3 +1,5 @@
+import { oneLineTrim } from 'common-tags'
+
 import { Auth } from '../../service/Auth'
 import { UserRepository } from '../../service/UserRepository'
 import { Page } from '../Page'
@@ -81,81 +83,100 @@ export class AuthBlog implements Blog {
   }
 
   public renderRegister(): string {
-    const renderedPage = [
-      '<nav><ul>',
-      '<li><a href="javascript:history.back()">Back</a></li>',
-      '</ul></nav>',
-      '<main>',
-      '<h1>Sign On</h1>',
-      '<form action="/register" method="POST">',
-      '<label>Username</label><input name="username" autofocus autocomplete="off" /><br/>',
-      '<label>Password</label><input name="password" type="password" /><br/>',
-      '<button type="submit">Sign On</button>',
-      '</form>',
-      '</main>',
-    ].join('')
+    const renderedPage = oneLineTrim`
+      <nav>
+        <ul>
+          <li><a href="javascript:history.back()">Back</a></li>
+        </ul>
+      </nav>
+      <main>
+        <h1>Sign On</h1>
+        <form action="/register" method="POST">
+          <label>Username</label>
+          <input name="username" autofocus autocomplete="off" /><br />
+          <label>Password</label>
+          <input name="password" type="password" /><br />
+          <button type="submit">Sign On</button>
+        </form>
+      </main>
+    `
     return this.renderLayout(renderedPage)
   }
 
   public renderLogin(): string {
-    const renderedPage = [
-      '<nav><ul>',
-      '<li><a href="javascript:history.back()">Back</a></li>',
-      '</ul></nav>',
-      '<main>',
-      '<h1>Sign In</h1>',
-      '<form action="/login" method="POST">',
-      '<label>Username</label><input name="username" autofocus autocomplete="off" /><br/>',
-      '<label>Password</label><input name="password" type="password" /><br/>',
-      '<button type="submit">Sign In</button>',
-      '</form>',
-      '</main>',
-    ].join('')
+    const renderedPage = oneLineTrim`
+      <nav>
+        <ul>
+          <li><a href="javascript:history.back()">Back</a></li>
+        </ul>
+      </nav>
+      <main>
+        <h1>Sign In</h1>
+        <form action="/login" method="POST">
+          <label>Username</label>
+          <input name="username" autofocus autocomplete="off" /><br />
+          <label>Password</label>
+          <input name="password" type="password" /><br />
+          <button type="submit">Sign In</button>
+        </form>
+      </main>
+    `
     return this.renderLayout(renderedPage)
   }
 
   public renderError(error): string {
-    const renderedPage = [
-      '<nav><ul>',
-      '<li><a href="javascript:history.back()">Back</a></li>',
-      '</ul></nav>',
-      '<main>',
-      '<h1>Sorry</h1>',
-      `<p>${error.message}</p>`,
-      '</main>',
-    ].join('')
+    const renderedPage = oneLineTrim`
+      <nav>
+        <ul>
+          <li><a href="javascript:history.back()">Back</a></li>
+        </ul>
+      </nav>
+      <main>
+        <h1>Sorry</h1>
+        <p>${error.message}</p>
+      </main>
+    `
     return this.renderLayout(renderedPage)
   }
 
   private renderLayout(renderedPage: string): string {
     const user = this.auth.getUser()
 
-    let layout = ['<nav><ul>']
+    const authMenu =
+      user != null
+        ? oneLineTrim`
+            <li><span>Welcome, ${user.getUsername()}!</span></li>
+            <li><a href="/logout">Sign out</a></li>
+          `
+        : oneLineTrim`
+            <li><a href="/register">Sign On</a></li>
+            <li><a href="/login">Sign In</a></li>
+          `
 
-    if (user != null) {
-      layout = [
-        ...layout,
-        `<li><span>Welcome, ${user.getUsername()}!</span></li>`,
-        '<li><a href="/logout">Sign out</a></li>',
-      ]
-    } else {
-      layout = [
-        ...layout,
-        '<li><a href="/register">Sign On</a></li>',
-        '<li><a href="/login">Sign In</a></li>',
-      ]
-    }
+    const actionMenu =
+      user != null
+        ? oneLineTrim`
+            ${
+              this.auth.isAdmin()
+                ? '<li><a href="/add-page">Add Page</a></li>'
+                : ''
+            }
+            <li><a href="/add-post">Add Post</a></li>
+          `
+        : ''
 
-    layout = [...layout, '</ul></nav>', renderedPage, '<nav><ul>']
-
-    if (user != null) {
-      layout = [
-        ...layout,
-        this.auth.isAdmin() ? '<li><a href="/add-page">Add Page</a></li>' : '',
-        '<li><a href="/add-post">Add Post</a></li>',
-      ]
-    }
-
-    return [...layout, '</ul></nav>'].join('')
+    return oneLineTrim`
+      <nav>
+        <ul>
+          ${authMenu}
+        </ul>
+      </nav>
+      ${renderedPage}
+      <nav>
+        <ul>
+          ${actionMenu}
+        </ul>
+      </nav>
+    `
   }
 }

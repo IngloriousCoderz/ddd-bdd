@@ -1,3 +1,5 @@
+import { oneLineTrim } from 'common-tags'
+
 import { Page } from '../Page'
 import { Blog } from './Blog'
 
@@ -42,20 +44,27 @@ export class LayoutDecorator implements Blog {
   }
 
   private renderLayout(renderedPage: string): string {
-    return [this.renderNav(), '<main>', renderedPage, '</main>'].join('')
+    return oneLineTrim`
+      ${this.renderNav()}
+      <main>
+      ${renderedPage}
+      </main>
+    `
   }
 
   private renderNav(): string {
-    return [
-      '<nav><ul>',
-      ...this.getPages().map(this.renderLink),
-      '</ul></nav>',
-    ].join('')
+    return oneLineTrim`
+      <nav>
+        <ul>
+          ${this.getPages()
+            .map(this.renderLink)
+            .join('')}
+        </ul>
+      </nav>
+    `
   }
 
   private renderLink(page: Page): string {
-    return [
-      `<li><a href="/pages/${page.getId()}">${page.getTitle()}</a></li>`,
-    ].join('')
+    return `<li><a href="/pages/${page.getId()}">${page.getTitle()}</a></li>`
   }
 }

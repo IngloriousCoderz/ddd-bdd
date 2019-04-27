@@ -1,3 +1,5 @@
+import { oneLineTrim } from 'common-tags'
+
 import { PageRepository } from '../../service/PageRepository'
 import { PostRepository } from '../../service/PostRepository'
 import { UserRepository } from '../../service/UserRepository'
@@ -11,14 +13,16 @@ export class BaseBlog implements Blog {
   constructor(private users: UserRepository, private posts: PostRepository) {}
 
   public renderAddPage(): string {
-    return [
-      '<h1>Add Page</h1>',
-      '<form action="/add-page" method="POST">',
-      '<label>Title</label><input name="title" autofocus autocomplete="off" /><br/>',
-      '<label>Body</label><textarea name="body" rows="8" cols="26"></textarea><br/>',
-      '<button type="submit">Add Page</button>',
-      '</form>',
-    ].join('')
+    return oneLineTrim`
+      <h1>Add Page</h1>
+      <form action="/add-page" method="POST">
+        <label>Title</label>
+        <input name="title" autofocus autocomplete="off" /><br />
+        <label>Body</label>
+        <textarea name="body" rows="8" cols="26"></textarea><br />
+        <button type="submit">Add Page</button>
+      </form>
+    `
   }
 
   public addPage(title: string, body: string): string {
@@ -38,14 +42,16 @@ export class BaseBlog implements Blog {
   }
 
   public renderAddPost(): string {
-    return [
-      '<h1>Add Post</h1>',
-      '<form action="/add-post" method="POST">',
-      '<label>Title</label><input name="title" autofocus autocomplete="off" /><br/>',
-      '<label>Body</label><textarea name="body" rows="8" cols="26"></textarea><br/>',
-      '<button type="submit">Add Post</button>',
-      '</form>',
-    ].join('')
+    return oneLineTrim`
+      <h1>Add Post</h1>
+      <form action="/add-post" method="POST">
+        <label>Title</label>
+        <input name="title" autofocus autocomplete="off" /><br />
+        <label>Body</label>
+        <textarea name="body" rows="8" cols="26"></textarea><br />
+        <button type="submit">Add Post</button>
+      </form>
+    `
   }
 
   public addPost(

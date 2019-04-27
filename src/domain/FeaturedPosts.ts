@@ -1,3 +1,5 @@
+import { oneLineTrim } from 'common-tags'
+
 import { PostRepository } from '../service/PostRepository'
 import { UserRepository } from '../service/UserRepository'
 import { toId } from '../service/utils'
@@ -26,15 +28,20 @@ export class FeaturedPosts implements Page {
       .map(post => post.renderPreview())
       .join('')
 
-    return [
-      '<article>',
-      `<h1>${this.title}</h1>`,
-      '<div>Filter: <a href="/pages/featured-posts?author=">all</a>',
-      ...this.users.all().map(this.getUserLink),
-      '</div>',
-      '</article>',
-      `${body.length ? body : '<article>No posts yet.</article>'}`,
-    ].join('')
+    return oneLineTrim`
+      <article>
+        <h1>${this.title}</h1>
+        <div>
+          Filter:
+          <a href="/pages/featured-posts?author=">all</a>
+          ${this.users
+            .all()
+            .map(this.getUserLink)
+            .join('')}
+        </div>
+      </article>
+      ${body.length ? body : '<article>No posts yet.</article>'}
+    `
   }
 
   private getUserLink(user) {

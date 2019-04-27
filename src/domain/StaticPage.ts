@@ -1,3 +1,5 @@
+import { oneLineTrim } from 'common-tags'
+
 import { toId } from '../service/utils'
 import { Page } from './Page'
 
@@ -17,11 +19,11 @@ export class StaticPage implements Page {
   }
 
   public render(): string {
-    return [
-      '<article>',
-      `<h1>${this.title}</h1>`,
-      `<div>${this.body}</div>`,
-      '</article>',
-    ].join('')
+    return oneLineTrim`
+      <article>
+        <h1>${this.title}</h1>
+        <div>${this.body}</div>
+      </article>
+    `
   }
 }

@@ -1,3 +1,5 @@
+import { oneLineTrim } from 'common-tags'
+
 import { toId } from '../service/utils'
 import { User } from './User'
 
@@ -18,25 +20,25 @@ export class Post {
   }
 
   public renderPreview(): string {
-    return [
-      '<article>',
-      `<h2>${this.title}</h2>`,
-      `<div class="sub">by ${this.getAuthorName()} - ${this.formatDate()}</div>`,
-      `<div class="text-right"><a href="/posts/${
-        this.id
-      }">read more&rsaquo;</a></div>`,
-      '</article>',
-    ].join('')
+    return oneLineTrim`
+      <article>
+        <h2>${this.title}</h2>
+        <div class="sub">by ${this.getAuthorName()} - ${this.formatDate()}</div>
+        <div class="text-right">
+          <a href="/posts/${this.id}">read more&rsaquo;</a>
+        </div>
+      </article>
+    `
   }
 
   public render(): string {
-    return [
-      '<article>',
-      `<h1>${this.title}</h1>`,
-      `<div class="sub">by ${this.getAuthorName()} - ${this.formatDate()}</div>`,
-      `<div>${this.body}</div>`,
-      '</article>',
-    ].join('')
+    return oneLineTrim`
+      <article>
+        <h1>${this.title}</h1>
+        <div class="sub">by ${this.getAuthorName()} - ${this.formatDate()}</div>
+        <div>${this.body}</div>
+      </article>
+    `
   }
 
   public getAuthorName() {
